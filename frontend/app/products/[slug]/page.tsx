@@ -8,8 +8,6 @@ type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const dynamic = "force-dynamic";
-
 export async function generateStaticParams() {
   try {
     const products = await fetchProducts();

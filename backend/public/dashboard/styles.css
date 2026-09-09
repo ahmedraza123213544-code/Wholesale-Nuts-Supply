@@ -593,11 +593,11 @@ th {
 
 .mobile-bar,
 .mobile-only {
-  display: none;
+  display: none !important;
 }
 
 .icon-btn.sidebar-close {
-  display: none;
+  display: none !important;
 }
 
 .sidebar-backdrop {
@@ -649,7 +649,6 @@ th {
 .burger::after { top: 6px; }
 
 .mobile-cards {
-  display: grid;
   gap: 12px;
   padding: 14px;
 }
@@ -738,7 +737,8 @@ th {
 @media (max-width: 900px) {
   .desktop-only { display: none !important; }
   .mobile-only { display: grid !important; }
-  .icon-btn.sidebar-close { display: inline-grid; }
+  .mobile-bar { display: flex !important; }
+  .icon-btn.sidebar-close { display: inline-grid !important; }
 
   .mobile-bar {
     display: flex;

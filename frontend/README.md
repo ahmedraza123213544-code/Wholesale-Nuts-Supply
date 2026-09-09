@@ -29,8 +29,18 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Hostinger static deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Prefer production API URL in .env.local before build:
+# NEXT_PUBLIC_API_URL=https://your-backend.vercel.app
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+yarn build
+```
+
+This creates:
+- `out/` — static site files
+- `out.zip` — same files zipped (old zip is replaced every build)
+
+Upload/extract `out.zip` into your Hostinger `public_html` folder.
+Keep the backend running during build so product detail pages are generated.

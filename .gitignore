@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# logs / OS
+*.log
+.DS_Store
+Thumbs.db
+
+# uploads / local
+backend/uploads/

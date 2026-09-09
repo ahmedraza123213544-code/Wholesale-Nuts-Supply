@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WNS Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="boot-screen" class="boot-screen hidden" aria-live="polite">
+      <div class="boot-card">
+        <div class="page-spinner" aria-hidden="true"></div>
+        <p>Restoring your session…</p>
+      </div>
+    </div>
+
+    <div id="login-view" class="login-shell">
+      <form id="login-form" class="login-card">
+        <p class="eyebrow">Admin Access</p>
+        <h1>Wholesale Nut Supply</h1>
+        <p class="muted">
+          Manage inquiries, products, and categories with live database data.
+        </p>
+        <label>
+          Admin password
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter admin password"
+          />
+          <span class="field-error" data-error-for="password"></span>
+        </label>
+        <button id="login-btn" class="btn btn-primary btn-block" type="submit">
+          <span class="btn-label">Sign in</span>
+          <span class="btn-spinner" aria-hidden="true"></span>
+        </button>
+        <p id="login-error" class="error hidden"></p>
+      </form>
+    </div>
+
+    <div id="app-view" class="app-shell hidden">
+      <div id="sidebar-backdrop" class="sidebar-backdrop" aria-hidden="true"></div>
+
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+          <div class="brand">
+            <span class="brand-mark">W</span>
+            <div>
+              <strong>WNS Admin</strong>
+              <span>Wholesale control</span>
+            </div>
+          </div>
+          <button
+            id="sidebar-close"
+            class="icon-btn sidebar-close"
+            type="button"
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
+        <nav class="side-nav">
+          <button data-tab="overview" class="nav-btn active" type="button">
+            Overview
+          </button>
+          <button data-tab="inquiries" class="nav-btn" type="button">
+            Inquiries
+          </button>
+          <button data-tab="products" class="nav-btn" type="button">
+            Products
+          </button>
+          <button data-tab="categories" class="nav-btn" type="button">
+            Categories
+          </button>
+        </nav>
+        <button id="logout-btn" class="btn btn-ghost btn-sidebar" type="button">
+          <span class="btn-label">Sign out</span>
+          <span class="btn-spinner" aria-hidden="true"></span>
+        </button>
+      </aside>
+
+      <main class="content">
+        <div class="mobile-bar">
+          <button
+            id="sidebar-open"
+            class="icon-btn"
+            type="button"
+            aria-label="Open menu"
+          >
+            <span class="burger" aria-hidden="true"></span>
+          </button>
+          <div class="mobile-bar-brand">
+            <strong>WNS Admin</strong>
+            <span id="mobile-tab-label">Overview</span>
+          </div>
+          <button id="refresh-btn-mobile" class="icon-btn" type="button" aria-label="Refresh">
+            ↻
+          </button>
+        </div>
+
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Dashboard</p>
+            <h2 id="page-title">Overview</h2>
+            <p id="page-subtitle" class="muted">
+              Live data from Neon PostgreSQL + Cloudinary.
+            </p>
+          </div>
+          <button id="refresh-btn" class="btn btn-ghost desktop-only" type="button">
+            <span class="btn-label">Refresh</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+        </header>
+
+        <p id="global-error" class="banner-error hidden" role="alert"></p>
+
+        <section id="overview-panel" class="panel">
+          <div class="stats-grid" id="stats-grid">
+            <div class="panel-empty">
+              <div class="page-spinner" aria-hidden="true"></div>
+              <p>Loading stats…</p>
+            </div>
+          </div>
+          <div class="hero-note">
+            <h3>Operational snapshot</h3>
+            <p>
+              Products and categories shown on the website come from this
+              dashboard. Upload images to Cloudinary when creating records.
+            </p>
+          </div>
+        </section>
+
+        <section id="inquiries-panel" class="panel hidden">
+          <div class="table-card" id="inquiries-list">
+            <div class="table-wrap desktop-only">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Company</th>
+                    <th>Interest</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                  </tr>
+                </thead>
+                <tbody id="inquiries-body">
+                  <tr class="loading-row">
+                    <td colspan="7">
+                      <div class="panel-empty">
+                        <div class="page-spinner" aria-hidden="true"></div>
+                        <p>Loading inquiries…</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="inquiries-cards" class="mobile-cards mobile-only" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section id="products-panel" class="panel hidden">
+          <div class="workspace">
+            <form id="product-form" class="form-card">
+              <div class="form-head">
+                <h3>Add / Edit Product</h3>
+                <p class="muted">Validated with Zod before save.</p>
+              </div>
+              <input type="hidden" id="product-id" />
+
+              <label>
+                Name
+                <input id="product-name" />
+                <span class="field-error" data-error-for="name"></span>
+              </label>
+              <label>
+                Slug
+                <input id="product-slug" placeholder="auto from name" />
+                <span class="field-error" data-error-for="slug"></span>
+              </label>
+              <label>
+                Category
+                <select id="product-category"></select>
+                <span class="field-error" data-error-for="categoryId"></span>
+              </label>
+              <label>
+                Type
+                <select id="product-type">
+                  <option>Raw</option>
+                  <option>Roasted</option>
+                  <option>Blanched</option>
+                  <option>In-Shell</option>
+                  <option>Mixed</option>
+                  <option>Dried</option>
+                </select>
+                <span class="field-error" data-error-for="type"></span>
+              </label>
+              <label>
+                Short description
+                <textarea id="product-short" rows="2"></textarea>
+                <span class="field-error" data-error-for="shortDescription"></span>
+              </label>
+              <label>
+                Description
+                <textarea id="product-description" rows="4"></textarea>
+                <span class="field-error" data-error-for="description"></span>
+              </label>
+              <div class="media-field">
+                <div class="media-field-head">
+                  <strong>Main image</strong>
+                  <span class="media-badge" id="product-image-badge">Cloudinary required</span>
+                </div>
+                <p class="muted media-hint">
+                  Upload a file — it goes to Cloudinary and the secure URL is saved in the database.
+                </p>
+                <input id="product-image-file" type="file" accept="image/*" />
+                <span class="field-error" data-error-for="image"></span>
+                <input type="hidden" id="product-image" />
+                <div id="product-image-preview" class="preview media-preview hidden"></div>
+                <p id="product-image-url" class="media-url muted"></p>
+              </div>
+              <div class="media-field">
+                <div class="media-field-head">
+                  <strong>Gallery images</strong>
+                  <span class="media-badge">Cloudinary</span>
+                </div>
+                <input id="product-gallery-files" type="file" accept="image/*" multiple />
+                <input type="hidden" id="product-gallery" />
+                <div id="product-gallery-preview" class="preview-row"></div>
+              </div>
+              <label>
+                Grade
+                <input id="product-grade" />
+                <span class="field-error" data-error-for="grade"></span>
+              </label>
+              <label>
+                Packaging (comma separated)
+                <input id="product-packaging" />
+              </label>
+              <label>
+                Sizes (comma separated)
+                <input id="product-sizes" />
+              </label>
+              <label>
+                MOQ
+                <input id="product-moq" />
+                <span class="field-error" data-error-for="moq"></span>
+              </label>
+              <label>
+                Availability
+                <select id="product-availability">
+                  <option>In Stock</option>
+                  <option>Limited</option>
+                  <option>Made to Order</option>
+                </select>
+              </label>
+              <label class="checkbox">
+                <input id="product-featured" type="checkbox" />
+                Featured product
+              </label>
+              <label>
+                Quality notes (comma separated)
+                <input id="product-notes" />
+              </label>
+              <label>
+                Wholesale info
+                <textarea id="product-wholesale" rows="3"></textarea>
+              </label>
+              <div class="row">
+                <button id="product-submit" class="btn btn-primary" type="submit">
+                  <span class="btn-label">Save product</span>
+                  <span class="btn-spinner" aria-hidden="true"></span>
+                </button>
+                <button id="product-reset" class="btn btn-ghost" type="button">
+                  Reset
+                </button>
+              </div>
+              <p id="product-message" class="form-message"></p>
+            </form>
+
+            <div class="table-card" id="products-list">
+              <div class="table-wrap desktop-only">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Category</th>
+                      <th>Stock</th>
+                      <th>Featured</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="products-body">
+                    <tr class="loading-row">
+                      <td colspan="5">
+                        <div class="panel-empty">
+                          <div class="page-spinner" aria-hidden="true"></div>
+                          <p>Loading products…</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div id="products-cards" class="mobile-cards mobile-only" aria-live="polite"></div>
+              <div id="products-pagination" class="pagination" aria-label="Products pagination"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="categories-panel" class="panel hidden">
+          <div class="workspace">
+            <form id="category-form" class="form-card">
+              <div class="form-head">
+                <h3>Add / Edit Category</h3>
+                <p class="muted">Validated with Zod before save.</p>
+              </div>
+              <input type="hidden" id="category-id" />
+              <label>
+                Name
+                <input id="category-name" />
+                <span class="field-error" data-error-for="name"></span>
+              </label>
+              <label>
+                Slug
+                <input id="category-slug" placeholder="auto from name" />
+              </label>
+              <label>
+                Description
+                <textarea id="category-description" rows="3"></textarea>
+              </label>
+              <div class="media-field">
+                <div class="media-field-head">
+                  <strong>Category image</strong>
+                  <span class="media-badge" id="category-image-badge">Cloudinary</span>
+                </div>
+                <p class="muted media-hint">
+                  Upload to Cloudinary. The URL is stored on the category record.
+                </p>
+                <input id="category-image-file" type="file" accept="image/*" />
+                <span class="field-error" data-error-for="image"></span>
+                <input type="hidden" id="category-image" />
+                <div id="category-image-preview" class="preview media-preview hidden"></div>
+                <p id="category-image-url" class="media-url muted"></p>
+              </div>
+              <div class="row">
+                <button id="category-submit" class="btn btn-primary" type="submit">
+                  <span class="btn-label">Save category</span>
+                  <span class="btn-spinner" aria-hidden="true"></span>
+                </button>
+                <button id="category-reset" class="btn btn-ghost" type="button">
+                  Reset
+                </button>
+              </div>
+              <p id="category-message" class="form-message"></p>
+            </form>
+
+            <div class="table-card" id="categories-list">
+              <div class="table-wrap desktop-only">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Slug</th>
+                      <th>Products</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="categories-body">
+                    <tr class="loading-row">
+                      <td colspan="4">
+                        <div class="panel-empty">
+                          <div class="page-spinner" aria-hidden="true"></div>
+                          <p>Loading categories…</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div id="categories-cards" class="mobile-cards mobile-only" aria-live="polite"></div>
+              <div id="categories-pagination" class="pagination" aria-label="Categories pagination"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

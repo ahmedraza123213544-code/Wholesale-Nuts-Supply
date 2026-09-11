@@ -31,10 +31,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Hostinger static deploy
 
-```bash
-# Prefer production API URL in .env.local before build:
-# NEXT_PUBLIC_API_URL=https://your-backend.vercel.app
+API URL is set in `config/constants.ts` (same pattern as POS).
 
+```bash
 yarn build
 ```
 
@@ -42,5 +41,5 @@ This creates:
 - `out/` — static site files
 - `out.zip` — same files zipped (old zip is replaced every build)
 
+The production backend URL from `config/constants.ts` is baked into the zip at build time.
 Upload/extract `out.zip` into your Hostinger `public_html` folder.
-Keep the backend running during build so product detail pages are generated.

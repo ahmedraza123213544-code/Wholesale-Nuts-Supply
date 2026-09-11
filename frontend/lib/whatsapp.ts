@@ -1,4 +1,5 @@
 import { siteConfig } from "@/lib/site-data";
+import { SITE_URL } from "@/config/constants";
 
 const WHATSAPP_NUMBER = "923423344040";
 
@@ -9,9 +10,7 @@ export function getWhatsAppQuoteUrl(product: {
   slug?: string;
 }) {
   const siteUrl =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    typeof window !== "undefined" ? window.location.origin : SITE_URL;
 
   const lines = [
     `Hello ${siteConfig.name},`,

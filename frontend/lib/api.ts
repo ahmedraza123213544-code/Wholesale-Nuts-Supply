@@ -1,6 +1,4 @@
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ||
-  "https://wholesale-nuts-supply-7bs3.vercel.app";
+import { API_URL } from "@/config/constants";
 
 export function getApiUrl(path = "") {
   return `${API_URL}${path.startsWith("/") ? path : `/${path}`}`;

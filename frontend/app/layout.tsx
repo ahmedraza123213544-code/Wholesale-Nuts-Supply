@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   title: `${siteConfig.name} | Premium Wholesale Nuts`,
   description: siteConfig.description,
   icons: {
-    icon: [{ url: "/new-logo.png", type: "image/png" }],
-    shortcut: "/new-logo.png",
-    apple: "/new-logo.png",
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
 };
 

@@ -1,0 +1,734 @@
+[
+  {
+    "name": "California Almonds Extra No.1",
+    "slug": "california-almonds-extra-no1",
+    "type": "Raw",
+    "short_description": "Premium whole almonds selected for size uniformity and clean flavor.",
+    "description": "California Extra No.1 almonds supplied for retail packing, snacking lines, and manufacturing. Ideal when you need consistent appearance, low breakage, and reliable wholesale volume.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935939/wholesale-nuts/products/fwn5lyffbeg7cjocvcba.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935939/wholesale-nuts/products/fwn5lyffbeg7cjocvcba.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935941/wholesale-nuts/products/gzkxdcej8irutb9ivsjf.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg"
+    ],
+    "grade": "Extra No.1",
+    "packaging": [
+      "25 lb cases",
+      "50 lb bags",
+      "Pallet programs"
+    ],
+    "sizes": [
+      "Whole",
+      "Sliced",
+      "Slivered"
+    ],
+    "moq": "From 25 lb cases",
+    "availability": "In Stock",
+    "featured": true,
+    "specifications": [
+      {
+        "label": "Origin",
+        "value": "California"
+      },
+      {
+        "label": "Form",
+        "value": "Whole / sliced / slivered"
+      },
+      {
+        "label": "Grade",
+        "value": "Extra No.1"
+      },
+      {
+        "label": "MOQ",
+        "value": "25 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Sorted for size and visual consistency",
+      "Suitable for private-label and bulk programs",
+      "Available in multiple pack formats"
+    ],
+    "wholesale_info": "Request tiered pricing based on monthly volume, packaging preference, and delivery destination.",
+    "category": "Almonds"
+  },
+  {
+    "name": "Blanched Almonds",
+    "slug": "blanched-almonds",
+    "type": "Blanched",
+    "short_description": "Skinless blanched almonds prepared for confectionery and bakery use.",
+    "description": "Clean blanched almonds with a smooth finish, preferred by bakeries and confectioners that need pale color and consistent processing performance.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935939/wholesale-nuts/products/fwn5lyffbeg7cjocvcba.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935939/wholesale-nuts/products/fwn5lyffbeg7cjocvcba.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935944/wholesale-nuts/products/ldm0610bgbtwxjezkknf.jpg"
+    ],
+    "grade": "Blanched Select",
+    "packaging": [
+      "25 lb cases",
+      "Carton packs"
+    ],
+    "sizes": [
+      "Whole blanched",
+      "Sliced blanched"
+    ],
+    "moq": "From 25 lb cases",
+    "availability": "In Stock",
+    "featured": false,
+    "specifications": [
+      {
+        "label": "Process",
+        "value": "Blanched"
+      },
+      {
+        "label": "Color",
+        "value": "Light cream"
+      },
+      {
+        "label": "Use cases",
+        "value": "Bakery / confectionery"
+      },
+      {
+        "label": "MOQ",
+        "value": "25 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Low skin residue",
+      "Stable moisture handling",
+      "Ready for manufacturing lines"
+    ],
+    "wholesale_info": "Pricing depends on format, order frequency, and whether you need private-label packaging support.",
+    "category": "Almonds"
+  },
+  {
+    "name": "Cashews WW320",
+    "slug": "cashews-ww320",
+    "type": "Raw",
+    "short_description": "Buttery whole cashews with consistent sizing for snacking and retail.",
+    "description": "WW320 whole cashews selected for wholesale buyers who need uniform kernels, clean taste, and dependable case availability for ongoing programs.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935947/wholesale-nuts/products/smnnowrjjkc6biqhf0ia.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935947/wholesale-nuts/products/smnnowrjjkc6biqhf0ia.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg"
+    ],
+    "grade": "WW320",
+    "packaging": [
+      "20 lb cases",
+      "50 lb cartons"
+    ],
+    "sizes": [
+      "Whole kernels"
+    ],
+    "moq": "From 20 lb cases",
+    "availability": "In Stock",
+    "featured": true,
+    "specifications": [
+      {
+        "label": "Grade",
+        "value": "WW320"
+      },
+      {
+        "label": "Form",
+        "value": "Whole kernels"
+      },
+      {
+        "label": "Flavor profile",
+        "value": "Mild, buttery"
+      },
+      {
+        "label": "MOQ",
+        "value": "20 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Sized for premium presentation",
+      "Suitable for roasted or raw packing",
+      "Strong wholesale reorder performance"
+    ],
+    "wholesale_info": "Ask for volume brackets if you purchase regularly across multiple SKUs.",
+    "category": "Cashews"
+  },
+  {
+    "name": "Cashews WW240",
+    "slug": "cashews-ww240",
+    "type": "Raw",
+    "short_description": "Larger whole cashews for premium retail and gift assortments.",
+    "description": "WW240 cashews offer a larger kernel profile preferred in premium snack packs and specialty assortments where visual impact matters.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935947/wholesale-nuts/products/smnnowrjjkc6biqhf0ia.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935947/wholesale-nuts/products/smnnowrjjkc6biqhf0ia.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935949/wholesale-nuts/products/jrewlbydknpgudxglguj.jpg"
+    ],
+    "grade": "WW240",
+    "packaging": [
+      "20 lb cases",
+      "Custom cartons"
+    ],
+    "sizes": [
+      "Large whole kernels"
+    ],
+    "moq": "From 20 lb cases",
+    "availability": "Limited",
+    "featured": true,
+    "specifications": [
+      {
+        "label": "Grade",
+        "value": "WW240"
+      },
+      {
+        "label": "Kernel size",
+        "value": "Large"
+      },
+      {
+        "label": "Best for",
+        "value": "Premium retail"
+      },
+      {
+        "label": "MOQ",
+        "value": "20 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "High visual impact",
+      "Clean whole-kernel presentation",
+      "Ideal for gift and specialty lines"
+    ],
+    "wholesale_info": "Limited lots available seasonally—request current inventory and lead times.",
+    "category": "Cashews"
+  },
+  {
+    "name": "Roasted Pistachios In-Shell",
+    "slug": "roasted-pistachios-in-shell",
+    "type": "In-Shell",
+    "short_description": "Roasted in-shell pistachios with vibrant color and open shells.",
+    "description": "Wholesale roasted pistachios prepared for snack retail and bulk bins, with strong color contrast and a high open-shell ratio for customer appeal.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935951/wholesale-nuts/products/sf3kd08fe5qulcf5zt8h.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935951/wholesale-nuts/products/sf3kd08fe5qulcf5zt8h.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935949/wholesale-nuts/products/jrewlbydknpgudxglguj.jpg"
+    ],
+    "grade": "Roasted In-Shell",
+    "packaging": [
+      "25 lb cases",
+      "Bulk cartons"
+    ],
+    "sizes": [
+      "In-shell"
+    ],
+    "moq": "From 25 lb cases",
+    "availability": "In Stock",
+    "featured": true,
+    "specifications": [
+      {
+        "label": "Form",
+        "value": "In-shell roasted"
+      },
+      {
+        "label": "Seasoning",
+        "value": "Plain / salted options"
+      },
+      {
+        "label": "Use cases",
+        "value": "Retail / snack bins"
+      },
+      {
+        "label": "MOQ",
+        "value": "25 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Strong open-shell appearance",
+      "Stable roast profile",
+      "Retail-ready visual quality"
+    ],
+    "wholesale_info": "Share preferred seasoning and monthly volume for tailored wholesale pricing.",
+    "category": "Pistachios"
+  },
+  {
+    "name": "Pistachio Kernels",
+    "slug": "pistachio-kernels",
+    "type": "Raw",
+    "short_description": "Shelled pistachio kernels for manufacturing and gourmet packing.",
+    "description": "Green pistachio kernels supplied for confectionery, bakery, ice cream, and premium packing programs that require vibrant color and clean flavor.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935951/wholesale-nuts/products/sf3kd08fe5qulcf5zt8h.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935951/wholesale-nuts/products/sf3kd08fe5qulcf5zt8h.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935941/wholesale-nuts/products/gzkxdcej8irutb9ivsjf.jpg"
+    ],
+    "grade": "Kernel Select",
+    "packaging": [
+      "25 lb cases"
+    ],
+    "sizes": [
+      "Whole kernels",
+      "Broken options"
+    ],
+    "moq": "From 25 lb cases",
+    "availability": "Made to Order",
+    "featured": false,
+    "specifications": [
+      {
+        "label": "Form",
+        "value": "Shelled kernels"
+      },
+      {
+        "label": "Color",
+        "value": "Green-forward"
+      },
+      {
+        "label": "Use cases",
+        "value": "Manufacturing / gourmet"
+      },
+      {
+        "label": "MOQ",
+        "value": "25 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Color-focused selection",
+      "Suitable for premium formulations",
+      "Available by program schedule"
+    ],
+    "wholesale_info": "Made-to-order programs require lead time—contact us with your production calendar.",
+    "category": "Pistachios"
+  },
+  {
+    "name": "English Walnut Halves",
+    "slug": "english-walnut-halves",
+    "type": "Raw",
+    "short_description": "Light walnut halves selected for baking and retail packing.",
+    "description": "English walnut halves chosen for color and intact structure, supporting bakery, confection, and premium mixed-nut programs.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935953/wholesale-nuts/products/lc33bzuhwwrxwhw7yhyn.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935953/wholesale-nuts/products/lc33bzuhwwrxwhw7yhyn.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg"
+    ],
+    "grade": "Light Halves",
+    "packaging": [
+      "30 lb cases",
+      "Bulk cartons"
+    ],
+    "sizes": [
+      "Halves",
+      "Pieces available"
+    ],
+    "moq": "From 30 lb cases",
+    "availability": "In Stock",
+    "featured": true,
+    "specifications": [
+      {
+        "label": "Grade",
+        "value": "Light halves"
+      },
+      {
+        "label": "Form",
+        "value": "Shelled"
+      },
+      {
+        "label": "Best for",
+        "value": "Baking / retail"
+      },
+      {
+        "label": "MOQ",
+        "value": "30 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Color-sorted for consistency",
+      "Strong structural halves",
+      "Reliable for recurring bakery demand"
+    ],
+    "wholesale_info": "Volume pricing available for bakeries and manufacturers with standing orders.",
+    "category": "Walnuts"
+  },
+  {
+    "name": "Roasted Peanuts",
+    "slug": "roasted-peanuts",
+    "type": "Roasted",
+    "short_description": "Wholesale roasted peanuts for snack manufacturing and bulk retail.",
+    "description": "Roasted peanuts supplied for high-volume snack programs, butter production support, and bulk retail packing with consistent roast character.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935955/wholesale-nuts/products/xgra08i8jg71oujrxjq7.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935955/wholesale-nuts/products/xgra08i8jg71oujrxjq7.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg"
+    ],
+    "grade": "Roasted Runner",
+    "packaging": [
+      "50 lb bags",
+      "Bulk sacks"
+    ],
+    "sizes": [
+      "Whole roasted",
+      "Split options"
+    ],
+    "moq": "From 50 lb bags",
+    "availability": "In Stock",
+    "featured": false,
+    "specifications": [
+      {
+        "label": "Process",
+        "value": "Dry roasted"
+      },
+      {
+        "label": "Variety",
+        "value": "Runner"
+      },
+      {
+        "label": "Use cases",
+        "value": "Snacks / manufacturing"
+      },
+      {
+        "label": "MOQ",
+        "value": "50 lb bags"
+      }
+    ],
+    "quality_notes": [
+      "Even roast profile",
+      "High-volume friendly packaging",
+      "Stable for recurring replenishment"
+    ],
+    "wholesale_info": "Ideal for distributors and manufacturers needing frequent replenishment cycles.",
+    "category": "Peanuts"
+  },
+  {
+    "name": "Blanched Hazelnuts",
+    "slug": "blanched-hazelnuts",
+    "type": "Blanched",
+    "short_description": "Blanched hazelnuts for chocolate, pastry, and specialty lines.",
+    "description": "Skinless blanched hazelnuts prepared for confectionery and bakery teams that need clean flavor, smooth texture, and wholesale consistency.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935957/wholesale-nuts/products/s0lqkg4wz8zdexzj1akr.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935957/wholesale-nuts/products/s0lqkg4wz8zdexzj1akr.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935941/wholesale-nuts/products/gzkxdcej8irutb9ivsjf.jpg"
+    ],
+    "grade": "Blanched",
+    "packaging": [
+      "25 lb cases"
+    ],
+    "sizes": [
+      "Whole blanched"
+    ],
+    "moq": "From 25 lb cases",
+    "availability": "Limited",
+    "featured": true,
+    "specifications": [
+      {
+        "label": "Process",
+        "value": "Blanched"
+      },
+      {
+        "label": "Best for",
+        "value": "Chocolate / pastry"
+      },
+      {
+        "label": "Form",
+        "value": "Whole"
+      },
+      {
+        "label": "MOQ",
+        "value": "25 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Clean blanched finish",
+      "Excellent for premium confectionery",
+      "Limited seasonal availability"
+    ],
+    "wholesale_info": "Contact us early for seasonal production planning and reserved allocation.",
+    "category": "Hazelnuts"
+  },
+  {
+    "name": "Signature Mixed Nuts",
+    "slug": "signature-mixed-nuts",
+    "type": "Mixed",
+    "short_description": "Balanced mixed-nut blends designed for retail and private label.",
+    "description": "A curated mix of premium nuts balanced for flavor, appearance, and margin—available as a signature blend or customized to your brand assortment.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935944/wholesale-nuts/products/ldm0610bgbtwxjezkknf.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935949/wholesale-nuts/products/jrewlbydknpgudxglguj.jpg"
+    ],
+    "grade": "Custom Blend Ready",
+    "packaging": [
+      "20 lb cases",
+      "Private-label options"
+    ],
+    "sizes": [
+      "Standard blend",
+      "Custom ratios"
+    ],
+    "moq": "From 20 lb cases",
+    "availability": "In Stock",
+    "featured": true,
+    "specifications": [
+      {
+        "label": "Blend style",
+        "value": "Signature / custom"
+      },
+      {
+        "label": "Components",
+        "value": "Almond, cashew, walnut, pistachio options"
+      },
+      {
+        "label": "Best for",
+        "value": "Retail / private label"
+      },
+      {
+        "label": "MOQ",
+        "value": "20 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Visually balanced mix",
+      "Custom ratio programs available",
+      "Strong shelf appeal"
+    ],
+    "wholesale_info": "Ask about custom blend development for private-label and regional retail programs.",
+    "category": "Mixed Nuts"
+  },
+  {
+    "name": "Macadamias Style 1",
+    "slug": "macadamia-style-1",
+    "type": "Raw",
+    "short_description": "Creamy Style 1 macadamias for premium snacking and confection.",
+    "description": "Style 1 macadamias with rich texture and premium appearance, suited to gourmet snack packs, chocolate inclusions, and gift assortments.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935960/wholesale-nuts/products/k7a52oghhksz4rclzmco.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935960/wholesale-nuts/products/k7a52oghhksz4rclzmco.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935947/wholesale-nuts/products/smnnowrjjkc6biqhf0ia.jpg"
+    ],
+    "grade": "Style 1",
+    "packaging": [
+      "15 lb cases",
+      "25 lb cases"
+    ],
+    "sizes": [
+      "Style 1 wholes / halves"
+    ],
+    "moq": "From 15 lb cases",
+    "availability": "Limited",
+    "featured": false,
+    "specifications": [
+      {
+        "label": "Style",
+        "value": "Style 1"
+      },
+      {
+        "label": "Texture",
+        "value": "Rich / creamy"
+      },
+      {
+        "label": "Best for",
+        "value": "Gourmet / confection"
+      },
+      {
+        "label": "MOQ",
+        "value": "15 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Premium style selection",
+      "Excellent confection performance",
+      "Limited allocation windows"
+    ],
+    "wholesale_info": "Premium SKU with limited availability—request current stock before planning promotions.",
+    "category": "Macadamias"
+  },
+  {
+    "name": "Premium Dry Dates",
+    "slug": "premium-dry-dates",
+    "type": "Dried",
+    "short_description": "Wholesale dry dates selected for rich sweetness, soft texture, and clean presentation.",
+    "description": "Premium dry dates supplied for retail packing, confectionery, bakery, and hospitality programs. Chosen for consistent size, natural sweetness, and dependable wholesale volume for seasonal and year-round demand.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935961/wholesale-nuts/products/mrivjti8bfh3klke5nly.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935961/wholesale-nuts/products/mrivjti8bfh3klke5nly.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935944/wholesale-nuts/products/ldm0610bgbtwxjezkknf.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935941/wholesale-nuts/products/gzkxdcej8irutb9ivsjf.jpg"
+    ],
+    "grade": "Premium Dried",
+    "packaging": [
+      "10 kg cartons",
+      "20 kg cartons",
+      "Bulk cases"
+    ],
+    "sizes": [
+      "Whole dry dates",
+      "Pitted available on request"
+    ],
+    "moq": "From 10 kg cartons",
+    "availability": "In Stock",
+    "featured": true,
+    "specifications": [
+      {
+        "label": "Category",
+        "value": "Dried fruits / Dry dates"
+      },
+      {
+        "label": "Form",
+        "value": "Whole / pitted on request"
+      },
+      {
+        "label": "Grade",
+        "value": "Premium dried"
+      },
+      {
+        "label": "MOQ",
+        "value": "10 kg cartons"
+      }
+    ],
+    "quality_notes": [
+      "Selected for sweetness and soft bite",
+      "Suitable for retail, bakery, and hospitality",
+      "Available in carton and bulk wholesale packs"
+    ],
+    "wholesale_info": "Request volume pricing by carton size, monthly demand, and preferred delivery schedule.",
+    "category": "Dried Fruits"
+  },
+  {
+    "name": "Premium Dried Fruit Assortment",
+    "slug": "dried-fruit-assortment",
+    "type": "Dried",
+    "short_description": "Wholesale dried fruit selections for mixes, retail, and bakery.",
+    "description": "A wholesale dried-fruit assortment designed to complement nut programs—ideal for trail mixes, bakery inclusions, and specialty retail assortments.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935944/wholesale-nuts/products/ldm0610bgbtwxjezkknf.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935944/wholesale-nuts/products/ldm0610bgbtwxjezkknf.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg"
+    ],
+    "grade": "Premium Dried",
+    "packaging": [
+      "20 lb cases",
+      "Mixed cartons"
+    ],
+    "sizes": [
+      "Assorted dried fruits"
+    ],
+    "moq": "From 20 lb cases",
+    "availability": "In Stock",
+    "featured": false,
+    "specifications": [
+      {
+        "label": "Category",
+        "value": "Dried fruits"
+      },
+      {
+        "label": "Use cases",
+        "value": "Mixes / bakery / retail"
+      },
+      {
+        "label": "Program style",
+        "value": "Assortment / custom"
+      },
+      {
+        "label": "MOQ",
+        "value": "20 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Complements nut assortments",
+      "Useful for private-label mixes",
+      "Flexible carton programs"
+    ],
+    "wholesale_info": "Pair with mixed-nut programs for complete wholesale assortment pricing.",
+    "category": "Dried Fruits"
+  },
+  {
+    "name": "Roasted Seed Blend",
+    "slug": "roasted-seed-blend",
+    "type": "Roasted",
+    "short_description": "Wholesale roasted seed blends for snacks and healthy assortments.",
+    "description": "A roasted seed blend built for snack manufacturers and retailers expanding beyond classic nuts into high-turn healthy assortment SKUs.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935955/wholesale-nuts/products/xgra08i8jg71oujrxjq7.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935955/wholesale-nuts/products/xgra08i8jg71oujrxjq7.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg"
+    ],
+    "grade": "Roasted Blend",
+    "packaging": [
+      "20 lb cases",
+      "25 lb cases"
+    ],
+    "sizes": [
+      "Seed blend"
+    ],
+    "moq": "From 20 lb cases",
+    "availability": "Made to Order",
+    "featured": false,
+    "specifications": [
+      {
+        "label": "Process",
+        "value": "Roasted"
+      },
+      {
+        "label": "Category",
+        "value": "Seeds"
+      },
+      {
+        "label": "Best for",
+        "value": "Healthy snack lines"
+      },
+      {
+        "label": "MOQ",
+        "value": "20 lb cases"
+      }
+    ],
+    "quality_notes": [
+      "Custom blend ratios available",
+      "Supports healthy assortment expansion",
+      "Scheduled production recommended"
+    ],
+    "wholesale_info": "Made-to-order blend—share target composition and monthly demand for a quote.",
+    "category": "Seeds"
+  },
+  {
+    "name": "Custom Private Label Mix",
+    "slug": "custom-private-label-mix",
+    "type": "Mixed",
+    "short_description": "Tailored nut mixes developed for private-label wholesale programs.",
+    "description": "Work with our team to design a private-label mix with the ratio, packaging, and grade profile that fits your brand positioning and margin targets.",
+    "image": "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935949/wholesale-nuts/products/jrewlbydknpgudxglguj.jpg",
+    "gallery": [
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935949/wholesale-nuts/products/jrewlbydknpgudxglguj.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935942/wholesale-nuts/products/txr4v9aeblwwxe24uyig.jpg",
+      "https://res.cloudinary.com/xdcqfbmo/image/upload/v1788935944/wholesale-nuts/products/ldm0610bgbtwxjezkknf.jpg"
+    ],
+    "grade": "Custom Program",
+    "packaging": [
+      "Private-label cartons",
+      "Bulk cases"
+    ],
+    "sizes": [
+      "Custom"
+    ],
+    "moq": "Program-based",
+    "availability": "Made to Order",
+    "featured": false,
+    "specifications": [
+      {
+        "label": "Program",
+        "value": "Private label"
+      },
+      {
+        "label": "Customization",
+        "value": "Blend / pack / label"
+      },
+      {
+        "label": "Lead time",
+        "value": "Based on scope"
+      },
+      {
+        "label": "MOQ",
+        "value": "Program-based"
+      }
+    ],
+    "quality_notes": [
+      "Built around your brand brief",
+      "Flexible packaging pathways",
+      "Supported by wholesale account management"
+    ],
+    "wholesale_info": "Schedule a consultation to define blend ratios, packaging, and launch volumes.",
+    "category": "Other"
+  }
+]

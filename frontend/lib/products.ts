@@ -12,11 +12,11 @@ export type ProductType =
   | string;
 
 export type CatalogProduct = {
-  id?: number;
+  id?: number | string;
   slug: string;
   name: string;
   category: ProductCategory;
-  categoryId?: number | null;
+  categoryId?: number | string | null;
   type: ProductType;
   shortDescription: string;
   description: string;

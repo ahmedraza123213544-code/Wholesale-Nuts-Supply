@@ -5,10 +5,10 @@ export const siteConfig = {
   description:
     "Trusted B2B partner for retailers, manufacturers, and foodservice brands sourcing premium nuts at scale.",
   email: "orders@wholesalenutsupply.com",
-  phone: "0336 2500357",
-  phoneHref: "tel:+923362500357",
-  whatsapp: "https://wa.me/923362500357",
-  address: "Bahadurabad, Karachi",
+  phone: "+92 342 3344040",
+  phoneHref: "tel:+923423344040",
+  whatsapp: "https://wa.me/923423344040",
+  address: "Bahadurabad, Karachi, Pakistan",
   mapUrl:
     "https://www.google.com/maps?q=Bahadurabad,+Karachi&output=embed",
   hours: "Mon–Fri · 9:00 AM – 6:00 PM",

@@ -1,6 +1,6 @@
 import { siteConfig } from "@/lib/site-data";
 
-const WHATSAPP_NUMBER = "923362500357";
+const WHATSAPP_NUMBER = "923423344040";
 
 export function getWhatsAppQuoteUrl(product: {
   name: string;

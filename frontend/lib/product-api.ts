@@ -4,7 +4,12 @@ import type { CatalogProduct } from "@/lib/products";
 type ProductsResponse = { data: CatalogProduct[] };
 type ProductResponse = { data: CatalogProduct; related?: CatalogProduct[] };
 type CategoriesResponse = {
-  data: Array<{ id: number; name: string; slug: string; productCount?: number }>;
+  data: Array<{
+    id: number | string;
+    name: string;
+    slug: string;
+    productCount?: number;
+  }>;
 };
 
 export async function fetchProducts(params?: {

@@ -60,10 +60,17 @@ app.use(cors({
       'http://localhost:3000',
       'http://localhost:3001',
       'http://localhost:5173',
-      'https://wholesale-nuts-supply.vercel.app',
-      'https://www.wholesalenutsupply.com',
+      // Production POS frontend
+      'https://wholesale-nuts-supply-wh7t.vercel.app',
+      // Production website
       'https://wholesalenutsupply.com',
-      ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map((v) => v.trim()).filter(Boolean) : []),
+      'https://www.wholesalenutsupply.com',
+      // Backend / other vercel apps
+      'https://wholesale-nuts-supply.vercel.app',
+      'https://wholesale-nuts-supply-7bs3.vercel.app',
+      'https://www.wholesale-nut-supply.com',
+      'https://wholesale-nut-supply.com',
+      ...(process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map((v) => v.trim().replace(/\/$/, '')).filter(Boolean) : []),
     ];
     
     // Check if origin matches (with or without trailing slash)

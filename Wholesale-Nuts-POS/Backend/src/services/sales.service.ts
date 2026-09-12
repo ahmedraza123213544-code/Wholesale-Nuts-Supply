@@ -706,7 +706,6 @@ class SaleService {
       select: { id: true, name: true },
     });
     const foundProductIds = new Set(products.map(p => p.id));
-    const productNameById = new Map(products.map((p) => [p.id, p.name]));
     const missingProductIds = uniqueProductIds.filter(id => !foundProductIds.has(id));
     if (missingProductIds.length > 0) {
       throw new AppError(400, `Products not found: ${missingProductIds.join(', ')}`);
@@ -729,16 +728,9 @@ class SaleService {
       {}
     );
 
-    for (const gp of Object.values(grouped)) {
-      const available = new Prisma.Decimal(stockMap.get(gp.productId)?.current_quantity ?? 0);
-      if (gp.qty.gt(available)) {
-        const label = productNameById.get(gp.productId) ?? gp.productId;
-        throw new AppError(
-          400,
-          `Insufficient stock for ${label}. Available: ${available.toNumber()}, requested: ${gp.qty.toNumber()}`,
-        );
-      }
-    }
+    // Stock is not validated against requested quantity here: sales are allowed to
+    // proceed even when the requested quantity exceeds what's on hand, so stock can
+    // go negative rather than blocking the cashier.
 
     // 5) Compute stock movements in memory
 
@@ -1710,26 +1702,8 @@ class SaleService {
         throw new AppError(400, `Products not found: ${missing.join(", ")}`);
       }
 
-      if (branchId) {
-        const stockRows = await tx.stock.findMany({
-          where: { branch_id: branchId, product_id: { in: Array.from(new Set([...groupedOld.keys(), ...groupedNew.keys()])) } },
-          select: { product_id: true, current_quantity: true },
-        });
-        const stockMap = new Map(stockRows.map((s) => [s.product_id, new Prisma.Decimal(s.current_quantity)]));
-
-        for (const [productId, wanted] of groupedNew.entries()) {
-          const current = stockMap.get(productId) || new Prisma.Decimal(0);
-          const rollbackQty = groupedOld.get(productId) || new Prisma.Decimal(0);
-          const availableAfterRollback = current.plus(rollbackQty);
-          if (wanted.gt(availableAfterRollback)) {
-            const productName = productMap.get(productId)?.name || "Unknown product";
-            throw new AppError(
-              400,
-              `Insufficient stock for ${productName}. Available: ${availableAfterRollback.toNumber()}, requested: ${wanted.toNumber()}`,
-            );
-          }
-        }
-      }
+      // Stock is not validated against requested quantity here: edited sales are
+      // allowed to proceed even when the requested quantity exceeds what's on hand.
 
       const subtotal = data.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
       const discount = Math.max(0, data.discountAmount ?? Number(oldSale.discount_amount));

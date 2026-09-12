@@ -653,58 +653,13 @@ export function NewSale() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getProductStock = useCallback(
-    (productId: string): number => {
-      const product = products.find((p) => p.id === productId);
-      if (!product) return 0;
-      return Number(product.available_stock ?? product.stock ?? 0);
-    },
-    [products],
-  );
-
-  const resolveCartLineProductId = (line: CartItem) =>
-    line.productId || line.id.split("_")[0];
-
-  const validateCartStock = useCallback(
-    (cartItems: CartItem[]): string | null => {
-      if (cartItems.length === 0) return null;
-
-      const qtyByProduct = new Map<string, number>();
-      const nameByProduct = new Map<string, string>();
-
-      for (const line of cartItems) {
-        const productId = resolveCartLineProductId(line);
-        qtyByProduct.set(productId, (qtyByProduct.get(productId) ?? 0) + line.quantity);
-        nameByProduct.set(productId, line.name);
-      }
-
-      for (const [productId, requested] of qtyByProduct) {
-        const available = getProductStock(productId);
-        const name = nameByProduct.get(productId) ?? "Product";
-        if (available <= 0) {
-          return `${name} is out of stock.`;
-        }
-        if (requested > available + 0.0001) {
-          return `Insufficient stock for ${name}. Available: ${available}, requested: ${requested}.`;
-        }
-      }
-
-      return null;
-    },
-    [getProductStock],
-  );
+  // Stock limits are intentionally not enforced here: cashiers can sell any quantity
+  // regardless of what's on hand — never block a sale for insufficient stock.
+  const validateCartStock = useCallback((_cartItems: CartItem[]): string | null => {
+    return null;
+  }, []);
 
   const addToCart = (product: Product, quantity: number = 1, customPrice?: number) => {
-    const availableStock = getProductStock(product.id);
-    if (availableStock <= 0) {
-      toast({
-        variant: "destructive",
-        title: "Out of stock",
-        description: `${product.name} has no available stock.`,
-      });
-      return;
-    }
-
     // When custom price is provided, it represents the TOTAL PRICE from barcode
     // Calculate quantity: barcodePrice / originalPrice
     // Original price is the price of 1 unit
@@ -869,6 +824,21 @@ export function NewSale() {
   /** Sell by whole number unless the unit is weight (kg/g). Unknown/empty = pieces. */
   const isPieceUnit = (unitName?: string): boolean => !isWeightUnit(unitName);
 
+  /** Short display form for a unit name, e.g. "Kilogram" -> "kg", so product cards stay compact. */
+  const getUnitAbbreviation = (unitName?: string): string => {
+    if (!unitName) return "";
+    const lower = unitName.toLowerCase().trim();
+    if (lower.startsWith("kilogram") || lower === "kg" || lower === "kgs") return "kg";
+    if (lower.startsWith("gram") || lower === "g") return "g";
+    if (lower.startsWith("litre") || lower.startsWith("liter") || lower === "l") return "L";
+    if (lower.startsWith("millilitre") || lower.startsWith("milliliter") || lower === "ml") return "ml";
+    if (lower.startsWith("piece") || lower === "pc" || lower === "pcs") return "pcs";
+    if (lower.startsWith("dozen")) return "dz";
+    if (lower.startsWith("box")) return "box";
+    if (lower.startsWith("pack")) return "pack";
+    return unitName;
+  };
+
   const getQuantityPresetOptions = (unitName?: string) => {
     if (isWeightUnit(unitName)) {
       return [
@@ -975,12 +945,8 @@ export function NewSale() {
         return numericValue;
       }
 
-      // No suffix provided:
-      // - Large integer-like values are usually grams in POS usage (e.g. 250 => 250g)
-      // - Smaller values are treated as kg (e.g. 1 => 1kg, 0.5 => 0.5kg)
-      if (numericValue >= 10) {
-        return numericValue / 1000;
-      }
+      // No suffix provided: always treat the number as kg (e.g. 450 => 450kg).
+      // Use an explicit "g"/"gram" suffix to enter a quantity in grams.
       return numericValue;
     }
 
@@ -2935,6 +2901,7 @@ export function NewSale() {
                 (item as any).productId === product.id || item.id === product.id
               );
               const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+              const unitAbbr = getUnitAbbreviation(product.unitName);
               return (
                 <Card
                   key={product.id}
@@ -2946,12 +2913,16 @@ export function NewSale() {
                       {product.name}
                     </h3>
                     <div className="flex items-center justify-between gap-1">
-                      <span className="text-sm font-bold text-blue-600">
+                      <span className="text-sm font-bold text-blue-600 whitespace-nowrap">
                         Rs {product.price.toLocaleString()}
+                        {unitAbbr && (
+                          <span className="text-[10px] font-normal text-gray-500">/{unitAbbr}</span>
+                        )}
                       </span>
                       {totalQuantity > 0 && (
-                        <Badge className="bg-blue-600 text-[10px] px-1.5 py-0.5">
+                        <Badge className="bg-blue-600 text-[10px] px-1.5 py-0.5 whitespace-nowrap shrink-0">
                           {formatQuantityValue(totalQuantity)}
+                          {unitAbbr ? ` ${unitAbbr}` : ""}
                         </Badge>
                       )}
                     </div>

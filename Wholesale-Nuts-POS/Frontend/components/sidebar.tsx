@@ -37,6 +37,7 @@ import {
   Download,
   User,
   BookOpen,
+  Globe,
   type LucideIcon,
 } from "lucide-react";
 
@@ -270,6 +271,19 @@ const menuSections: SidebarMenuSection[] = [
         id: "designation",
         label: "Designation",
         icon: Shield,
+        roles: ADMIN_ROLES,
+      },
+    ],
+  },
+  {
+    id: "website",
+    label: "Website",
+    expandable: true,
+    items: [
+      {
+        id: "website-inquiries",
+        label: "Website Inquiries",
+        icon: Globe,
         roles: ADMIN_ROLES,
       },
     ],

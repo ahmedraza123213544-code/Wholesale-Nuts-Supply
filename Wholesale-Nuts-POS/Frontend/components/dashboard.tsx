@@ -46,6 +46,7 @@ import {
 import { Sales } from "./sales";
 import Orders from "./orders";
 import WebsiteOrders from "./website-orders";
+import WebsiteInquiries from "./website-inquiries";
 import Subcategories from "./sub-categories";
 import Units from "./Units";
 import Suppliers from "./suppliers";
@@ -175,6 +176,8 @@ export function Dashboard({ onLogout }: DashboardProps) {
         return <Orders />;
       case "website-orders":
         return <WebsiteOrders />;
+      case "website-inquiries":
+        return <WebsiteInquiries />;
       case "units":
         return <Units />;
       case "sales-history":

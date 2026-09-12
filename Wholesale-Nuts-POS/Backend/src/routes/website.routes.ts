@@ -39,8 +39,8 @@ function mapProduct(product: any): CatalogProduct {
     shortDescription:
       description.length > 160 ? `${description.slice(0, 157)}...` : description || product.name,
     description: description || product.name,
-    image: images[0] || product.category?.image || "",
-    gallery: images,
+    image: images[0] || product.category?.image || "/products/mixed-nuts.jpg",
+    gallery: images.length ? images : [product.category?.image].filter(Boolean),
     grade: product.pct_or_hs_code || "Wholesale Grade",
     packaging: ["Bulk / wholesale packs"],
     sizes: product.size?.name ? [product.size.name] : ["Standard"],
@@ -193,10 +193,61 @@ export const createWebsiteInquiry = asyncHandler(async (req: Request, res: Respo
   res.status(201).json({ data: { id: inquiry.id } });
 });
 
+export const listWebsiteInquiries = asyncHandler(async (req: Request, res: Response) => {
+  const status = req.query.status ? String(req.query.status) : undefined;
+  const where = status && status !== "ALL" ? { status } : {};
+
+  const inquiries = await prisma.websiteInquiry.findMany({
+    where,
+    orderBy: { created_at: "desc" },
+  });
+
+  res.json({
+    data: inquiries.map((row) => ({
+      id: row.id,
+      fullName: row.full_name,
+      companyName: row.company_name,
+      email: row.email,
+      phone: row.phone,
+      businessType: row.business_type,
+      productInterest: row.product_interest,
+      orderQuantity: row.order_quantity,
+      message: row.message,
+      status: row.status,
+      createdAt: row.created_at,
+    })),
+  });
+});
+
+export const updateWebsiteInquiryStatus = asyncHandler(async (req: Request, res: Response) => {
+  const id = String(req.params.id || "");
+  const status = String(req.body?.status || "").trim().toLowerCase();
+  const allowed = ["new", "contacted", "closed"];
+
+  if (!id || !allowed.includes(status)) {
+    res.status(400).json({ error: "Valid id and status (new|contacted|closed) required." });
+    return;
+  }
+
+  const inquiry = await prisma.websiteInquiry.update({
+    where: { id },
+    data: { status },
+  });
+
+  res.json({
+    data: {
+      id: inquiry.id,
+      status: inquiry.status,
+    },
+  });
+});
+
 const router = Router();
 router.get("/products", listWebsiteProducts);
 router.get("/products/:slug", getWebsiteProductBySlug);
 router.get("/categories", listWebsiteCategories);
+router.get("/inquiries", listWebsiteInquiries);
+router.patch("/inquiries/:id", updateWebsiteInquiryStatus);
 router.post("/inquiries", createWebsiteInquiry);
 router.get("/health", (_req, res) => {
   res.json({ ok: true, service: "wholesale-nuts-pos-website-api" });

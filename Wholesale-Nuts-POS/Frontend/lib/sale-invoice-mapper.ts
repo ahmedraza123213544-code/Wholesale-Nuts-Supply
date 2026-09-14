@@ -52,7 +52,7 @@ export function mapSaleToInvoiceData(sale: Record<string, unknown>): InvoiceData
     storeAddress:
       (sale.branch as { address?: string } | undefined)?.address ||
       "Bahadurabad, Karachi, Pakistan",
-    storePhone: "+92 342 3344040",
+    storePhone: "0336 2500357",
     customerName: (sale.customer as { name?: string } | undefined)?.name || "Walk-in Customer",
     customerPhone: (sale.customer as { phone_number?: string } | undefined)?.phone_number || "",
     customerWhatsApp:

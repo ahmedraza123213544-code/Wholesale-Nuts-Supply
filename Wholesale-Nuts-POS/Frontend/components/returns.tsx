@@ -2845,6 +2845,8 @@ export function Returns({ module = "returns" }: { module?: ReturnsModule }) {
 function buildReturnNoteHtml(d: {
   saleNumber: string
   originalSaleNumber: string
+  customerName?: string
+  customerPhone?: string
   returnedItems: Array<{ name: string; qty: number; price: number }>
   exchangedItems: Array<{ name: string; qty: number; price: number }>
   refundTotal: number
@@ -2897,6 +2899,8 @@ function buildReturnNoteHtml(d: {
             <img src="${typeof window !== 'undefined' ? window.location.origin : ''}/logo.png" class="logo" onerror="this.style.display='none'"/>
             <div class="store-name">WHOLESALE NUT SUPPLY</div>
             <div class="store-info">
+              Bahadurabad, Karachi, Pakistan<br>
+              Contact: 0336 2500357<br>
               Return / Exchange Note
             </div>
           </div>
@@ -2905,6 +2909,8 @@ function buildReturnNoteHtml(d: {
             <div class="info-row">Date: <span class="info-val">${d.date}</span></div>
             <div class="info-row">Note No: <span class="info-val">#${d.saleNumber}</span></div>
             <div class="info-row">Original Sale: <span class="info-val">#${d.originalSaleNumber}</span></div>
+            <div class="info-row">Customer: <span class="info-val">${d.customerName || 'Walk-in'}</span></div>
+            <div class="info-row">Phone: <span class="info-val">${d.customerPhone?.trim() || '—'}</span></div>
           </div>
         </div>
 

@@ -129,7 +129,7 @@ export async function buildSupplierLedgerPdf(
   doc.text("WHOLESALE NUT SUPPLY", brandX, 11);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7.5);
-  doc.text("Bahadurabad, Karachi, Pakistan · +92 342 3344040", brandX, 16);
+  doc.text("Bahadurabad, Karachi, Pakistan · 0336 2500357", brandX, 16);
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(14);

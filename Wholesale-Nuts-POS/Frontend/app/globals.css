@@ -113,6 +113,24 @@ html {
   .table-responsive::-webkit-scrollbar-thumb:hover {
     @apply bg-gray-400;
   }
+
+  /* Safe page content area under mobile menu button */
+  .pos-page {
+    @apply w-full min-w-0 space-y-4 p-3 sm:p-4 md:p-6;
+  }
+
+  .pos-page-header {
+    @apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .pos-filters {
+    @apply grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4;
+  }
+
+  /* Prevent dialogs that set max-w-4xl from blowing past the phone edge */
+  [role="dialog"] {
+    max-width: min(100vw - 1.25rem, var(--dialog-max, 56rem));
+  }
 }
 
 @layer base {

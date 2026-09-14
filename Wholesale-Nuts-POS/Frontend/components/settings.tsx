@@ -14,7 +14,7 @@ export function Settings() {
   const [storeSettings, setStoreSettings] = useState({
     storeName: "WHOLESALE NUT SUPPLY",
     address: "Bahadurabad, Karachi, Pakistan",
-    phone: "+92 342 3344040",
+    phone: "0336 2500357",
     email: "orders@wholesalenutsupply.com",
     taxRate: "0.00",
     currency: "PKR",

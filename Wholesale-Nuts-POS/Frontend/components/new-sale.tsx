@@ -1388,6 +1388,7 @@ export function NewSale() {
     amountPaid: number,
     changeAmount: number
   ) => {
+    const selectedCustomerObj = customers.find((c) => c.id === selectedCustomer);
     return {
       transactionId,
       timestamp: new Date().toISOString(),
@@ -1398,7 +1399,12 @@ export function NewSale() {
       cashier: localStorage.getItem("userName") || "Admin",
       storeName: "WHOLESALE NUT SUPPLY",
       address: "Bahadurabad, Karachi, Pakistan",
-      storePhone: "+92 342 3344040",
+      storePhone: "0336 2500357",
+      customerType: selectedCustomerObj?.name || "Walk-in",
+      customerPhone:
+        selectedCustomerObj?.phone_number ||
+        selectedCustomerObj?.phone ||
+        "",
       amountPaid,
       changeAmount,
     };
@@ -1719,7 +1725,7 @@ export function NewSale() {
         return {
           storeName: receiptDataForServer?.storeName || "WHOLESALE NUT SUPPLY",
           storeAddress: fullAddress,
-          storePhone: "+92 342 3344040",
+          storePhone: "0336 2500357",
           customerName: selectedCustomerObj?.name || "Walk-in Customer",
           customerPhone:
             selectedCustomerObj?.phone_number || selectedCustomerObj?.phone || "",

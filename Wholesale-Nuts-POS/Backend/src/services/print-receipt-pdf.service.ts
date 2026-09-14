@@ -14,10 +14,12 @@ type PrintJobInput = {
     timestamp?: string;
     storeName?: string;
     address?: string;
+    storePhone?: string;
     tagline?: string;
     strn?: string;
     cashier?: string;
     customerType?: string;
+    customerPhone?: string;
     items: Array<{ name: string; quantity: number; price: number; unit?: string }>;
     subtotal: number;
     discount?: number;
@@ -225,6 +227,10 @@ export async function printReceiptPDF(input: PrintJobInput) {
   const usedAddr = drawFit(addr, margins.left, y, W, { maxSize: BODY_MAX, minSize: BODY_MIN, align: 'center' });
   y += lineH(usedAddr) - 2;
 
+  const phone = receiptData.storePhone || '0336 2500357';
+  const usedPhone = drawFit(`Contact: ${phone}`, margins.left, y, W, { maxSize: BODY_MAX, minSize: BODY_MIN, align: 'center' });
+  y += lineH(usedPhone) - 2;
+
   if (receiptData.strn) {
     const usedStrn = drawFit(receiptData.strn, margins.left, y, W, { maxSize: BODY_MAX, minSize: BODY_MIN, align: 'center' });
     y += lineH(usedStrn) - 2;
@@ -245,6 +251,10 @@ export async function printReceiptPDF(input: PrintJobInput) {
   const customerType = receiptData.customerType || 'Walk-in';
   const lh3 = rowLR(`Cashier  ${cashierName}`, customerType, y);
   y += lh3 + 2;
+
+  const custPhone = String(receiptData.customerPhone || '').trim() || '—';
+  const lhPhone = rowLR('Customer Phone', custPhone, y);
+  y += lhPhone + 2;
 
   y += hr(y, 'dotted');
 

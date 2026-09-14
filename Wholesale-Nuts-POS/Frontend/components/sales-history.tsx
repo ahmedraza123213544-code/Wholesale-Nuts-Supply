@@ -533,7 +533,11 @@ export function SalesHistory() {
     return {
       storeName: branch.name || "WHOLESALE NUT SUPPLY",
       address: branch.address || "Bahadurabad, Karachi, Pakistan",
+      storePhone: "0336 2500357",
       transactionId: sale.sale_number,
+      cashier: sale.user?.name || sale.cashier || "Admin",
+      customerType: sale.customer?.name || "Walk-in",
+      customerPhone: sale.customer?.phone_number || "",
       items,
       subtotal,
       total,
@@ -567,7 +571,7 @@ export function SalesHistory() {
     return {
       storeName: sale.branch?.name || "WHOLESALE NUT SUPPLY",
       storeAddress: sale.branch?.address || "Bahadurabad, Karachi, Pakistan",
-      storePhone: "+92 342 3344040",
+      storePhone: "0336 2500357",
       customerName: sale.customer?.name || "Walk-in Customer",
       customerPhone: sale.customer?.phone_number || "",
       customerWhatsApp: sale.customer?.whatsapp_number || sale.customer?.phone_number || "",
@@ -655,7 +659,7 @@ export function SalesHistory() {
               </div>
               <div class="store-info">
                 Bahadurabad, Karachi, Pakistan<br>
-                Contact: +92 342 3344040
+                Contact: 0336 2500357
               </div>
             </div>
             <div class="invoice-info">
@@ -669,7 +673,7 @@ export function SalesHistory() {
           <div class="bill-to">
             <div class="bill-label">Bill To:</div>
             <div class="customer-name">${data.customerName || 'Walk-in Customer'}</div>
-            ${data.customerPhone ? `<div class="info-row">${data.customerPhone}</div>` : ''}
+            <div class="info-row">Phone: ${data.customerPhone?.trim() || '—'}</div>
           </div>
 
           <table>

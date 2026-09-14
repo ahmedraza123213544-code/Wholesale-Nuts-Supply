@@ -399,6 +399,7 @@ export class BarcodeService {
     await tp.setTextNormal();
     await tp.println(receiptData.tagline || 'Quality • Service • Value');
     await tp.println(receiptData.address || 'Bahadurabad, Karachi, Pakistan');
+    await tp.println(`Contact: ${receiptData.storePhone || '0336 2500357'}`);
     await tp.drawLine();
 
     const ts = new Date(receiptData.timestamp || Date.now());
@@ -406,6 +407,7 @@ export class BarcodeService {
     await tp.println(`Receipt: ${receiptData.transactionId}`);
     await tp.println(`Date: ${ts.toLocaleDateString()} ${ts.toLocaleTimeString()}`);
     await tp.println(`Cashier: ${receiptData.cashier || 'Walk-in'}   Customer: ${receiptData.customerType || 'Walk-in'}`);
+    await tp.println(`Customer Phone: ${String(receiptData.customerPhone || '').trim() || '—'}`);
     await tp.drawLine();
 
     // Items

@@ -132,7 +132,7 @@ const WebsiteOrders: React.FC = () => {
       storeName: "WHOLESALE NUT SUPPLY",
       tagline: "Quality • Service • Value",
       address: "Bahadurabad, Karachi, Pakistan",
-      storePhone: "+92 342 3344040",
+      storePhone: "0336 2500357",
       transactionId: order.order_number,
       timestamp: order.created_at,
       cashier: "Website",

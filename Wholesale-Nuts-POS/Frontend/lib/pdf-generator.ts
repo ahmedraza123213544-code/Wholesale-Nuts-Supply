@@ -134,7 +134,7 @@ const buildInvoiceDoc = (data: InvoiceData, logoDataUrl: string | null): jsPDF =
     doc.setFontSize(8);
     doc.setTextColor(80, 80, 80);
     doc.text(data.storeAddress || 'Bahadurabad, Karachi, Pakistan', margin, topY + logoSize + 4);
-    doc.text(`Contact: ${data.storePhone || '+92 342 3344040'}`, margin, topY + logoSize + 8);
+    doc.text(`Contact: ${data.storePhone || '0336 2500357'}`, margin, topY + logoSize + 8);
 
     // Invoice meta (top right)
     const labelX = pageWidth - 85;
@@ -177,9 +177,13 @@ const buildInvoiceDoc = (data: InvoiceData, logoDataUrl: string | null): jsPDF =
     doc.setTextColor(0, 0, 0);
     doc.setFont('helvetica', 'bold');
     doc.text(data.customerName || 'Walk-in Customer', margin + 14, billY);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    doc.text(`Phone: ${data.customerPhone?.trim() || '—'}`, margin + 14, billY + 5);
 
     // Table header
-    const tableTop = billY + 6;
+    const tableTop = billY + 12;
     doc.setDrawColor(180, 180, 180);
     doc.setLineWidth(0.5);
     doc.line(margin, tableTop, pageWidth - margin, tableTop);
@@ -416,7 +420,15 @@ const buildReturnNoteDoc = (data: ReturnNoteData, logoDataUrl: string | null): j
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(80, 80, 80);
-    doc.text('Return / Exchange Note', margin, topY + logoSize + 4);
+    doc.text('Return / Exchange Note · 0336 2500357', margin, topY + logoSize + 4);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text(
+      `Customer: ${data.customerName?.trim() || 'Walk-in'} · Phone: ${data.customerPhone?.trim() || '—'}`,
+      margin,
+      topY + logoSize + 9
+    );
 
     // Right Info
     const rLabelX = pageWidth - 85;
@@ -450,7 +462,7 @@ const buildReturnNoteDoc = (data: ReturnNoteData, logoDataUrl: string | null): j
     doc.text(`#${data.originalSaleNumber}`, rValueX, topY + 22, { align: 'right' });
 
     // Table header
-    const tableTop = topY + logoSize + 14;
+    const tableTop = topY + logoSize + 16;
     doc.setDrawColor(180, 180, 180);
     doc.setLineWidth(0.5);
     doc.line(margin, tableTop, pageWidth - margin, tableTop);

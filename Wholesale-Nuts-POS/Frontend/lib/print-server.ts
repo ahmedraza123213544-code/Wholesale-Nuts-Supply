@@ -36,6 +36,7 @@ export interface ReceiptData {
   timestamp?: string;
   cashier?: string;
   customerType?: string;
+  customerPhone?: string;
   items: ReceiptItem[];
   subtotal: number;
   discount?: number;

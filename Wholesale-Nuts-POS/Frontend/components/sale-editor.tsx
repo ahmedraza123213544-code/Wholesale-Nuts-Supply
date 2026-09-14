@@ -442,9 +442,9 @@ export function SaleEditor({ sale, open, loading = false, onOpenChange, onSucces
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-5xl w-[95vw] max-w-5xl h-[90vh] max-h-[90vh] grid grid-rows-[auto_minmax(0,1fr)_auto] gap-0 p-0 overflow-hidden bg-white">
-        <DialogHeader className="px-6 py-4 border-b space-y-0">
-          <div className="flex justify-between items-start gap-4 pr-8">
+      <DialogContent className="grid h-[96dvh] max-h-[96dvh] w-full max-w-5xl grid-rows-[auto_minmax(0,1fr)_auto] gap-0 overflow-hidden bg-white p-0 sm:h-[90vh] sm:max-h-[90vh]">
+        <DialogHeader className="space-y-0 border-b px-4 py-3 sm:px-6 sm:py-4">
+          <div className="flex items-start justify-between gap-4 pr-8">
             <div className="min-w-0">
               <DialogTitle className="text-xl font-semibold flex flex-wrap items-center gap-2">
                 <Edit3 className="h-5 w-5 text-gray-500 shrink-0" />
@@ -466,7 +466,7 @@ export function SaleEditor({ sale, open, loading = false, onOpenChange, onSucces
           </div>
         ) : !showForm ? null : (
           <>
-            <div className="min-h-0 overflow-y-auto px-6 py-4 space-y-4">
+            <div className="min-h-0 space-y-4 overflow-y-auto px-4 py-3 sm:px-6 sm:py-4">
               {formError ? (
                 <Alert variant="destructive">
                   <AlertTriangle className="h-4 w-4" />
@@ -779,7 +779,7 @@ export function SaleEditor({ sale, open, loading = false, onOpenChange, onSucces
               </div>
             </div>
 
-            <DialogFooter className="px-6 py-4 border-t bg-gray-50">
+            <DialogFooter className="border-t bg-gray-50 px-4 py-3 sm:px-6 sm:py-4">
               <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
               <Button onClick={handleSave} disabled={isSaving || items.length === 0} className="min-w-[150px]">
                 {isSaving ? (

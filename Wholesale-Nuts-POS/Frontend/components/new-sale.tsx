@@ -45,6 +45,7 @@ import {
   Users,
   Printer,
   Mail,
+  ShoppingCart,
 } from "lucide-react";
 import { downloadA4Invoice, shareOnWhatsApp, shareOnEmail, printA4Invoice, type InvoiceData } from "@/lib/pdf-generator";
 import apiClient from "@/lib/apiClient";
@@ -248,6 +249,7 @@ export function NewSale() {
   const [amountInputs, setAmountInputs] = useState<Record<string, string>>({});
   const [showAmountEditors, setShowAmountEditors] = useState<Record<string, boolean>>({});
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [mobileCartOpen, setMobileCartOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [paymentMethodPending, setPaymentMethodPending] = useState<SalePaymentMethod | null>(null);
@@ -2190,6 +2192,10 @@ export function NewSale() {
     return cart[cart.length - 1];
   }, [cart, activeCartLineId]);
 
+  useEffect(() => {
+    if (paymentDialogOpen) setMobileCartOpen(false);
+  }, [paymentDialogOpen]);
+
   const confirmQuantityAndReturnToSearch = useCallback((lineId?: string) => {
     const id = lineId ?? quantityFocusLineIdRef.current ?? activeCartLineIdRef.current;
     if (id) {
@@ -2212,20 +2218,20 @@ export function NewSale() {
   }, [quickQtyFocusTick, focusQuantityInput]);
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="relative flex h-full min-h-0 flex-col lg:flex-row">
       {/* Products Section */}
-      <div className="flex-1 p-4 md:p-6 overflow-auto">
-        <div className="mb-4 md:mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-4">
+      <div className="min-h-0 flex-1 overflow-auto p-3 pb-28 sm:p-4 md:p-6 lg:pb-6">
+        <div className="mb-3 md:mb-6">
+          <div className="mb-3 flex flex-col gap-3 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">New Sales</h1>
+              <h1 className="text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">New Sale</h1>
               {lastTransactionId && (
                 <p className="text-sm text-green-600">
                   Last transaction: {lastTransactionId}
                 </p>
               )}
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="hidden flex-wrap items-center gap-2 lg:flex">
               {cart.length > 0 && (
                 <Button
                   variant="outline"
@@ -2254,8 +2260,8 @@ export function NewSale() {
               )}
             </div>
           </div>
-          <div className="flex w-full max-w-2xl flex-wrap items-stretch gap-2">
-            <div className="relative min-w-[12rem] w-full max-w-md flex-1">
+          <div className="flex w-full flex-col items-stretch gap-2 lg:max-w-2xl lg:flex-row lg:flex-wrap">
+            <div className="relative min-w-0 w-full flex-1 lg:max-w-md">
               <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${isScanning ? 'text-blue-500 animate-pulse' : 'text-gray-400'}`} />
               {isScanning && (
                 <LoadingSpinner size="sm" className="absolute right-3 top-1/2 transform -translate-y-1/2" />
@@ -2394,7 +2400,7 @@ export function NewSale() {
                   }
                 }}
                 className={cn(
-                  "h-10 pl-10 border-gray-200 shadow-sm focus-visible:ring-1 focus-visible:ring-blue-400 focus-visible:ring-offset-0",
+                  "h-12 pl-10 text-base border-gray-200 shadow-sm focus-visible:ring-1 focus-visible:ring-blue-400 focus-visible:ring-offset-0 lg:h-10 lg:text-sm",
                   isScanning && "border-blue-500 bg-blue-50/50 pr-10",
                 )}
                 autoFocus
@@ -2443,7 +2449,7 @@ export function NewSale() {
 
             <div
               className={cn(
-                "flex h-10 w-full min-w-[13rem] max-w-[15rem] shrink-0 items-stretch overflow-hidden rounded-md border bg-white shadow-sm transition-opacity sm:w-[15rem]",
+                "flex h-12 w-full shrink-0 items-stretch overflow-hidden rounded-md border bg-white shadow-sm transition-opacity lg:h-10 lg:w-[15rem] lg:max-w-[15rem]",
                 quickAdjustLine ? "border-gray-200" : "border-dashed border-gray-200 opacity-40",
               )}
               title={
@@ -2456,7 +2462,7 @@ export function NewSale() {
                 type="button"
                 variant="ghost"
                 disabled={!quickAdjustLine}
-                className="h-10 w-11 shrink-0 rounded-none border-r border-gray-200 px-0 hover:bg-slate-100 disabled:opacity-40 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="h-12 w-12 shrink-0 rounded-none border-r border-gray-200 px-0 hover:bg-slate-100 disabled:opacity-40 focus-visible:ring-0 focus-visible:ring-offset-0 lg:h-10 lg:w-11"
                 aria-label="Decrease quantity"
                 data-quick-qty="true"
                 onClick={() => quickAdjustLine && bumpQuantity(quickAdjustLine.id, -1)}
@@ -2565,7 +2571,7 @@ export function NewSale() {
                 type="button"
                 variant="ghost"
                 disabled={!quickAdjustLine}
-                className="h-10 w-11 shrink-0 rounded-none px-0 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-40 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="h-12 w-12 shrink-0 rounded-none px-0 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-40 focus-visible:ring-0 focus-visible:ring-offset-0 lg:h-10 lg:w-11"
                 aria-label="Increase quantity"
                 data-quick-qty="true"
                 onClick={() => quickAdjustLine && bumpQuantity(quickAdjustLine.id, 1)}
@@ -2578,16 +2584,16 @@ export function NewSale() {
 
           {/* Printer info - configured globally in Printer Settings */}
           {receiptPrinter && (
-            <div className="mb-4 px-4 py-2.5 rounded-xl border border-blue-100 bg-blue-50/60 flex items-center gap-2 text-sm text-blue-800">
+            <div className="mb-3 hidden items-center gap-2 rounded-xl border border-blue-100 bg-blue-50/60 px-3 py-2 text-sm text-blue-800 lg:mb-4 lg:flex">
               <span className="font-medium">🖨️ {receiptPrinter}</span>
-              <span className="text-blue-600 text-xs">(change in Printer Settings)</span>
+              <span className="text-xs text-blue-600">(change in Printer Settings)</span>
             </div>
           )}
 
         {/* Customer Selection */}
-        <div className="mb-4 bg-white text-black rounded-lg border border-gray-200 shadow-sm p-4">
-          <label className="block text-sm font-bold text-slate-800 mb-2">
-            Customer <span className="text-[10px] text-slate-400 font-medium ml-1">(Optional/Required for Credit)</span>
+        <div className="mb-3 rounded-lg border border-gray-200 bg-white p-2 text-black shadow-sm lg:mb-4 lg:p-4">
+          <label className="mb-1.5 hidden text-sm font-bold text-slate-800 lg:mb-2 lg:block">
+            Customer <span className="ml-1 text-[10px] font-medium text-slate-400">(Optional/Required for Credit)</span>
           </label>
           <div className="flex gap-2">
             <Popover open={customerSearchOpen} onOpenChange={setCustomerSearchOpen}>
@@ -2600,16 +2606,16 @@ export function NewSale() {
                 >
                   <div className="flex items-center gap-2 truncate">
                     <Users className="h-4 w-4 text-slate-400" />
-                    <span className="truncate">
-                      {selectedCustomer
-                        ? customers.find((c) => c.id === selectedCustomer)?.name
-                        : "Walk-in Customer"}
-                    </span>
+                  <span className="truncate">
+                    {selectedCustomer
+                      ? customers.find((c) => c.id === selectedCustomer)?.name
+                      : "Walk-in Customer"}
+                  </span>
                   </div>
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[300px] p-0" align="start">
+              <PopoverContent className="w-[min(calc(100vw-2rem),360px)] p-0" align="start">
                 <Command className="border-none shadow-none">
                   <CommandInput placeholder="Search customer by name or phone..." className="h-10" />
                   <CommandList className="max-h-[300px]">
@@ -2711,10 +2717,10 @@ export function NewSale() {
         </div>
 
         {/* Previous Sales */}
-        <div className="mb-4 bg-white text-black rounded-lg border border-gray-200 shadow-sm p-4">
-          <label className="block text-sm font-bold text-slate-800 mb-2">
+        <div className="mb-3 rounded-lg border border-gray-200 bg-white p-2 text-black shadow-sm lg:mb-4 lg:p-4">
+          <label className="mb-2 hidden text-sm font-bold text-slate-800 lg:block">
             Previous Sales
-            <span className="text-[10px] text-slate-400 font-medium ml-1">
+            <span className="ml-1 text-[10px] font-medium text-slate-400">
               {selectedCustomer ? "(this customer's bills)" : "(all bills — select a customer to filter)"}
             </span>
           </label>
@@ -2731,12 +2737,15 @@ export function NewSale() {
               >
                 <div className="flex items-center gap-2 truncate">
                   <FileText className="h-4 w-4 text-slate-400" />
-                  <span className="truncate text-slate-500">Select a previous bill to copy products…</span>
+                  <span className="truncate text-slate-500">
+                    <span className="lg:hidden">Previous bill</span>
+                    <span className="hidden lg:inline">Select a previous bill to copy products…</span>
+                  </span>
                 </div>
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[360px] p-0" align="start">
+            <PopoverContent className="w-[min(calc(100vw-2rem),360px)] p-0" align="start">
               {/* shouldFilter=false: the list is already the server-side search result
                   for previousSaleSearchTerm, so cmdk must not re-filter it client-side */}
               <Command className="border-none shadow-none" shouldFilter={false}>
@@ -2861,13 +2870,13 @@ export function NewSale() {
         </Dialog>
 
         {/* Categories */}
-        <div className="flex space-x-2 mb-6 overflow-x-auto">
+        <div className="-mx-1 mb-4 flex flex-nowrap gap-2 overflow-x-auto px-1 pb-1 touch-pan-x [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((category) => (
             <Button
               key={category.id}
               variant={selectedCategory === category.id ? "default" : "outline"}
               onClick={() => handleCategoryChange(category.id)}
-              className="whitespace-nowrap"
+              className="h-9 shrink-0 snap-start whitespace-nowrap rounded-full px-3.5"
               disabled={productsLoading}
             >
               {productsLoading && selectedCategory === category.id && (
@@ -2880,10 +2889,10 @@ export function NewSale() {
 
         {/* Products Grid */}
         {productsLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {Array.from({ length: 10 }).map((_, i) => (
               <Card key={i} className="animate-pulse">
-                <CardContent className="p-4">
+                <CardContent className="p-3">
                   <div className="aspect-square bg-gray-200 rounded-lg mb-3" />
                   <div className="h-4 bg-gray-200 rounded mb-2" />
                   <div className="h-4 bg-gray-200 rounded w-2/3 mb-2" />
@@ -2900,7 +2909,7 @@ export function NewSale() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {filteredProducts.map((product) => {
               // Find cart items by productId (for separate entries) or id (backward compatibility)
               const cartItems = cart.filter((item) => 
@@ -2911,15 +2920,15 @@ export function NewSale() {
               return (
                 <Card
                   key={product.id}
-                  className="cursor-pointer hover:shadow-sm transition-shadow"
+                  className="min-h-[4.75rem] cursor-pointer transition-transform active:scale-[0.98] hover:shadow-sm"
                   onClick={() => handleProductClick(product)}
                 >
-                  <CardContent className="p-2 space-y-1">
-                    <h3 className="text-xs font-semibold text-gray-900 leading-tight line-clamp-2">
+                  <CardContent className="space-y-1.5 p-3">
+                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-gray-900">
                       {product.name}
                     </h3>
                     <div className="flex items-center justify-between gap-1">
-                      <span className="text-sm font-bold text-blue-600 whitespace-nowrap">
+                      <span className="whitespace-nowrap text-base font-bold text-blue-600">
                         Rs {product.price.toLocaleString()}
                         {unitAbbr && (
                           <span className="text-[10px] font-normal text-gray-500">/{unitAbbr}</span>
@@ -2940,8 +2949,80 @@ export function NewSale() {
         )}
       </div>
 
+      {mobileCartOpen && (
+        <button
+          type="button"
+          aria-label="Close cart"
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setMobileCartOpen(false)}
+        />
+      )}
+
+      {/* Cart Section — bottom sheet on mobile, sidebar on desktop */}
+      <div
+        className={cn(
+          "flex flex-col bg-white",
+          "lg:static lg:z-auto lg:h-full lg:w-[min(100%,300px)] lg:shrink-0 lg:border-l lg:border-gray-200 xl:w-[320px]",
+          "fixed inset-x-0 bottom-0 z-50 lg:relative",
+          mobileCartOpen
+            ? "h-[min(88dvh,720px)] rounded-t-2xl shadow-[0_-8px_30px_rgba(15,23,42,0.18)]"
+            : "h-auto",
+        )}
+      >
+        <button
+          type="button"
+          className="flex w-full flex-col border-t border-gray-200 bg-white pt-2 text-left lg:hidden pb-[max(0.25rem,env(safe-area-inset-bottom))]"
+          onClick={() => setMobileCartOpen((open) => !open)}
+        >
+          <span className="mx-auto h-1 w-10 rounded-full bg-gray-300" />
+          <div className="flex w-full items-center gap-3 px-4 py-2.5">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white">
+              <ShoppingCart className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-gray-900">
+                {cart.length === 0
+                  ? "Cart is empty"
+                  : `${cart.length} item${cart.length === 1 ? "" : "s"}`}
+              </p>
+              <p className="truncate text-xs text-gray-500">
+                {cart.length === 0 ? "Tap a product to add it" : `Payable Rs ${formatMoney(total)}`}
+              </p>
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            {cart.length > 0 && (
+              <Button
+                size="sm"
+                className="h-9 px-3"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  startPayment("Cash");
+                }}
+                disabled={paymentLoading}
+              >
+                Cash
+              </Button>
+            )}
+            {mobileCartOpen ? (
+              <ChevronDown className="h-5 w-5 text-gray-500" />
+            ) : (
+              <ChevronUp className="h-5 w-5 text-gray-500" />
+            )}
+          </div>
+          </div>
+        </button>
+
+        <div
+          className={cn(
+            "min-h-0 flex-1 flex-col",
+            mobileCartOpen ? "flex" : "hidden lg:flex",
+          )}
+        >
+
       {/* Cart Section — fixed narrow width so product grid keeps more space */}
-      <div className="w-full shrink-0 lg:w-[min(100%,300px)] xl:w-[320px] bg-white lg:border-l border-gray-200 flex flex-col">
+      <div className="flex min-h-0 flex-1 flex-col">
         <div className="border-b border-gray-200 bg-slate-50/60 p-4">
           <div className="flex items-start justify-between gap-3">
             <div>
@@ -3440,6 +3521,8 @@ export function NewSale() {
             </div>
           </div>
         )}
+      </div>
+        </div>
       </div>
 
       <Dialog

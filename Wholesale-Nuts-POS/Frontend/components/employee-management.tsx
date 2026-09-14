@@ -44,7 +44,7 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const EMPLOYEE_DIALOG_CLASS =
-  "sm:max-w-2xl w-[calc(100vw-2rem)] max-h-[min(90vh,720px)] flex flex-col gap-0 p-0 overflow-hidden translate-y-[-50%] top-[50%]"
+  "sm:max-w-2xl w-full max-h-[96dvh] sm:max-h-[min(90vh,720px)] flex flex-col gap-0 p-0 overflow-hidden"
 
 function FormField({
   label,
@@ -349,10 +349,10 @@ export function EmployeeManagement() {
             <Button>Add Employee</Button>
           </DialogTrigger>
           <DialogContent className={EMPLOYEE_DIALOG_CLASS}>
-            <DialogHeader className="shrink-0 px-6 pt-6 pb-4 border-b">
+            <DialogHeader className="shrink-0 border-b px-4 pt-5 pb-3 sm:px-6 sm:pt-6 sm:pb-4">
               <DialogTitle>Add New Employee</DialogTitle>
             </DialogHeader>
-            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 py-4">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-6 sm:py-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
                 <FormField label="Full Name" htmlFor="name" required>
                   <Input
@@ -450,7 +450,7 @@ export function EmployeeManagement() {
                 </div>
               </div>
             </div>
-            <DialogFooter className="shrink-0 px-6 py-4 border-t bg-background">
+            <DialogFooter className="shrink-0 border-t bg-background px-4 py-3 sm:px-6 sm:py-4">
               <Button variant="outline" onClick={() => setIsAddDialogOpen(false)} disabled={actionLoading}>
                 Cancel
               </Button>
@@ -542,11 +542,11 @@ export function EmployeeManagement() {
       {/* Edit Employee Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className={EMPLOYEE_DIALOG_CLASS}>
-          <DialogHeader className="shrink-0 px-6 pt-6 pb-4 border-b">
+          <DialogHeader className="shrink-0 border-b px-4 pt-5 pb-3 sm:px-6 sm:pt-6 sm:pb-4">
             <DialogTitle>Edit Employee</DialogTitle>
           </DialogHeader>
           {editingEmployee && (
-            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 py-4">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-6 sm:py-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
                 <FormField label="Full Name" htmlFor="edit-name" required>
                   <Input
@@ -645,7 +645,7 @@ export function EmployeeManagement() {
               </div>
             </div>
           )}
-          <DialogFooter className="shrink-0 px-6 py-4 border-t bg-background">
+          <DialogFooter className="shrink-0 border-t bg-background px-4 py-3 sm:px-6 sm:py-4">
             <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} disabled={actionLoading}>
               Cancel
             </Button>

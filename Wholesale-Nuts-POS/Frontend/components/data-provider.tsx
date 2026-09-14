@@ -5,6 +5,7 @@ import { useStore } from '@/lib/store'
 import { useToast } from '@/hooks/use-toast'
 import { initializeOfflineMode } from '@/lib/offline-init'
 import { OfflineIndicator } from '@/components/offline-indicator'
+import { MobileTableCards } from '@/components/mobile-table-cards'
 
 interface DataProviderProps {
   children: React.ReactNode
@@ -58,6 +59,7 @@ export function DataProvider({ children }: DataProviderProps) {
   return (
     <>
       {children}
+      <MobileTableCards />
       <OfflineIndicator />
     </>
   )

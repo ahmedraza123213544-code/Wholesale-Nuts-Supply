@@ -69,7 +69,7 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
-const FULL_HEIGHT_VIEWS = new Set(["supplier-profile", "supplier-ledger", "customer-ledger"]);
+const FULL_HEIGHT_VIEWS = new Set(["new-sale", "supplier-profile", "supplier-ledger", "customer-ledger"]);
 
 export function Dashboard({ onLogout }: DashboardProps) {
   const DASHBOARD_TAB_STORAGE_KEY = "dashboard_active_tab";

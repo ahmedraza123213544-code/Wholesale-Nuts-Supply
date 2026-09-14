@@ -44,7 +44,7 @@ const months = [
 ];
 
 const SALARY_DIALOG_CLASS =
-    "sm:max-w-2xl w-[calc(100vw-2rem)] max-h-[min(90vh,640px)] flex flex-col gap-0 p-0 overflow-hidden";
+    "sm:max-w-2xl w-full max-h-[96dvh] sm:max-h-[min(90vh,640px)] flex flex-col gap-0 p-0 overflow-hidden";
 
 function SalaryFormFields({
     form,
@@ -366,14 +366,14 @@ export function Salaries() {
                         </Button>
                     </DialogTrigger>
                     <DialogContent className={SALARY_DIALOG_CLASS}>
-                        <DialogHeader className="shrink-0 px-6 pt-6 pb-4 border-b">
+                        <DialogHeader className="shrink-0 border-b px-4 pt-5 pb-3 sm:px-6 sm:pt-6 sm:pb-4">
                             <DialogTitle>Add Salary</DialogTitle>
                         </DialogHeader>
-                        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 py-4">
+                        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-6 sm:py-4">
                             <SalaryFormFields form={form} setForm={setForm} employees={employees} />
                             {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
                         </div>
-                        <DialogFooter className="shrink-0 px-6 py-4 border-t bg-background gap-2 sm:gap-0">
+                        <DialogFooter className="shrink-0 gap-2 border-t bg-background px-4 py-3 sm:gap-0 sm:px-6 sm:py-4">
                             <Button
                                 type="button"
                                 variant="outline"
@@ -528,10 +528,10 @@ export function Salaries() {
             {/* Edit Salary Dialog */}
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent className={SALARY_DIALOG_CLASS}>
-                    <DialogHeader className="shrink-0 px-6 pt-6 pb-4 border-b">
+                    <DialogHeader className="shrink-0 border-b px-4 pt-5 pb-3 sm:px-6 sm:pt-6 sm:pb-4">
                         <DialogTitle>Edit Salary</DialogTitle>
                     </DialogHeader>
-                    <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 py-4">
+                    <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-6 sm:py-4">
                         <SalaryFormFields
                             form={form}
                             setForm={setForm}
@@ -540,7 +540,7 @@ export function Salaries() {
                         />
                         {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
                     </div>
-                    <DialogFooter className="shrink-0 px-6 py-4 border-t bg-background gap-2 sm:gap-0">
+                    <DialogFooter className="shrink-0 gap-2 border-t bg-background px-4 py-3 sm:gap-0 sm:px-6 sm:py-4">
                         <Button
                             type="button"
                             variant="outline"

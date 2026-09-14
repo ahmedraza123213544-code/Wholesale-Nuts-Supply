@@ -1492,81 +1492,91 @@ export function SalesHistory() {
 
       {/* Sale Receipt Modal */}
       <Dialog open={!!viewSale || viewLoading} onOpenChange={closeViewModal}>
-        <DialogContent className="flex h-[96dvh] max-h-[96dvh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0 shadow-2xl sm:h-auto sm:max-h-[90vh]">
+        <DialogContent className="max-w-3xl w-[90vw] max-h-[96vh] flex flex-col p-0 gap-0 overflow-hidden shadow-2xl max-md:h-[96dvh] max-md:w-full max-md:max-w-none">
           {viewLoading ? (
-            <div className="flex min-h-[240px] items-center justify-center p-8 sm:min-h-[400px]">
+            <div className="p-8 flex items-center justify-center min-h-[400px]">
               <PageLoader message="Loading sale details..." />
             </div>
           ) : viewSale ? (
             <>
-              <DialogHeader className="flex-shrink-0 border-b border-gray-200 bg-white px-4 py-3 pr-12 sm:px-6 sm:py-4">
-                <DialogTitle className="text-lg font-bold text-gray-900 sm:text-xl">Sale Receipt</DialogTitle>
-                <DialogDescription className="hidden text-sm text-gray-600 sm:block">
-                  View and print the receipt exactly as it appears at checkout.
-                </DialogDescription>
-                <p className="truncate pt-1 text-xs font-medium text-gray-500">
-                  {viewSale.sale_number}
-                </p>
+              <DialogHeader className="px-8 pt-8 pb-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white flex-shrink-0 max-md:px-4 max-md:pt-4 max-md:pb-3 max-md:pr-12">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <DialogTitle className="text-2xl font-bold text-gray-900 mb-2 max-md:text-lg max-md:mb-0">Sale Receipt</DialogTitle>
+                    <DialogDescription className="text-sm text-gray-600 max-md:hidden">
+                      View and print the receipt exactly as it appears at checkout.
+                    </DialogDescription>
+                  </div>
+                  <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-md font-medium">
+                    {viewSale.sale_number}
+                  </div>
+                </div>
               </DialogHeader>
               
-              <div className="min-h-0 flex-1 overflow-auto bg-gray-100 p-2 sm:p-4">
+              <div className="flex-1 overflow-hidden bg-gray-50 min-h-0">
+                <div className="h-full overflow-auto p-3 sm:p-4 flex justify-center items-start">
                   {receiptHtml ? (
-                    <div className="mx-auto h-full w-full max-w-5xl overflow-hidden rounded-lg border border-gray-200 bg-white">
+                    <div className="w-full max-w-5xl mx-auto">
+                      <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-3 sm:p-4 overflow-hidden">
                         <iframe
                           ref={receiptIframeRef}
                           title="Receipt Preview"
                           srcDoc={receiptHtml}
-                          className="block h-full min-h-[220px] w-full bg-white sm:min-h-[360px]"
+                          className="block w-full bg-white rounded-lg shadow-inner"
                           style={{
                             width: "100%",
-                            height: `min(${Math.max(iframeHeight, 280)}px, 100%)`,
+                            minHeight: "400px",
+                            height: `${Math.min(iframeHeight, window.innerHeight * 0.65)}px`,
                             border: "none",
                           }}
                         />
+                      </div>
                     </div>
                   ) : (
-                    <div className="py-16 text-center text-gray-500">
-                      <div className="mb-2 text-lg font-medium">Receipt preview unavailable</div>
+                    <div className="text-center text-gray-500 py-20 w-full">
+                      <div className="text-lg font-medium mb-2">Receipt preview unavailable</div>
                       <div className="text-sm">Unable to load receipt data</div>
                     </div>
                   )}
+                </div>
               </div>
               
-              <DialogFooter className="flex-shrink-0 border-t border-gray-200 bg-white p-3 sm:px-6 sm:py-4">
-                <div className="w-full min-w-full space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="min-w-0 truncate text-xs text-gray-600">
-                      <span className="font-semibold text-gray-900">{viewSale.sale_number}</span>
-                      <span className="mx-1 text-gray-400">·</span>
-                      {format(parseISO(viewSale.sale_date), "PP p")}
-                    </p>
+              <DialogFooter className="px-6 py-4 border-t border-gray-200 bg-white flex-shrink-0 max-md:p-3">
+                <div className="w-full space-y-3">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 w-full">
+                    <div className="text-sm text-gray-700 flex items-center max-md:text-xs">
+                      <span className="font-semibold text-gray-900">Sale #{viewSale.sale_number}</span>
+                      <span className="mx-2 text-gray-400">•</span>
+                      <span className="text-gray-600">{format(parseISO(viewSale.sale_date), "PPpp")}</span>
+                    </div>
                     {receiptPrinter && (
-                      <span className="shrink-0 rounded-md bg-blue-50 px-2 py-1 text-[11px] font-medium text-blue-700">
-                        🖨️ {receiptPrinter}
-                      </span>
+                      <div className="flex items-center gap-2 text-xs text-blue-700 bg-blue-50 rounded-lg px-3 py-1.5">
+                        🖨️ <span className="font-medium">{receiptPrinter}</span>
+                      </div>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="hidden md:flex items-center justify-between gap-2.5 w-full">
+                    <div className="flex items-center gap-2.5">
                       <Button 
                         onClick={() => downloadA4Invoice(mapSaleToInvoiceData(viewSale))} 
-                        className="h-10 bg-blue-600 text-sm hover:bg-blue-700"
-                        size="sm"
+                        className="whitespace-nowrap shadow-sm hover:shadow-md transition-all bg-blue-600 hover:bg-blue-700"
+                        size="default"
                       >
-                        <Download className="mr-1.5 h-4 w-4" />
-                        Download
+                        <Download className="h-4 w-4 mr-2" />
+                        Download A4 Invoice
                       </Button>
                       <Button
                         variant="outline"
                         onClick={() => printA4Invoice(mapSaleToInvoiceData(viewSale))}
-                        className="h-10 text-sm"
-                        size="sm"
+                        className="whitespace-nowrap shadow-sm hover:shadow-md transition-all"
+                        size="default"
                       >
-                        Print
+                        Print Invoice
                       </Button>
                       <Button
                         variant="outline"
-                        className="h-10 border-[#25D366]/30 bg-[#25D366]/10 text-sm text-[#075E54] hover:bg-[#25D366]/20"
-                        size="sm"
+                        className="bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366]/20 border-[#25D366]/30 whitespace-nowrap shadow-sm transition-all"
+                        size="default"
                         onClick={async () => {
                           try {
                             const invoiceData = mapSaleToInvoiceData(viewSale);
@@ -1576,15 +1586,15 @@ export function SalesHistory() {
                           }
                         }}
                       >
-                        <svg className="mr-1.5 h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                        <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
                         </svg>
                         WhatsApp
                       </Button>
                       <Button
                         variant="outline"
-                        className="h-10 border-amber-200 bg-amber-50 text-sm text-amber-700 hover:bg-amber-100"
-                        size="sm"
+                        className="bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200 whitespace-nowrap shadow-sm transition-all"
+                        size="default"
                         onClick={async () => {
                           try {
                             const invoiceData = mapSaleToInvoiceData(viewSale);
@@ -1594,18 +1604,68 @@ export function SalesHistory() {
                           }
                         }}
                       >
-                        <Mail className="mr-1.5 h-4 w-4" />
+                        <Mail className="w-4 h-4 mr-2" />
                         Email
                       </Button>
-                  </div>
+                    </div>
                     <Button 
-                      variant="outline" 
+                      variant="default" 
                       onClick={closeViewModal}
-                      className="hidden h-9 w-full sm:inline-flex sm:w-auto"
-                      size="sm"
+                      className="whitespace-nowrap bg-black hover:bg-gray-800 text-white h-9"
+                      size="default"
                     >
                       Close
                     </Button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 md:hidden">
+                    <Button 
+                      onClick={() => downloadA4Invoice(mapSaleToInvoiceData(viewSale))} 
+                      className="h-10 bg-blue-600 text-sm hover:bg-blue-700"
+                      size="sm"
+                    >
+                      <Download className="mr-1.5 h-4 w-4" />
+                      Download
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => printA4Invoice(mapSaleToInvoiceData(viewSale))}
+                      className="h-10 text-sm"
+                      size="sm"
+                    >
+                      Print
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-10 border-[#25D366]/30 bg-[#25D366]/10 text-sm text-[#075E54] hover:bg-[#25D366]/20"
+                      size="sm"
+                      onClick={async () => {
+                        try {
+                          const invoiceData = mapSaleToInvoiceData(viewSale);
+                          await shareOnWhatsApp(invoiceData);
+                        } catch (e) {
+                          toast({ title: "Failed to share via WhatsApp", variant: "destructive" });
+                        }
+                      }}
+                    >
+                      WhatsApp
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-10 border-amber-200 bg-amber-50 text-sm text-amber-700 hover:bg-amber-100"
+                      size="sm"
+                      onClick={async () => {
+                        try {
+                          const invoiceData = mapSaleToInvoiceData(viewSale);
+                          await shareOnEmail(invoiceData);
+                        } catch (e) {
+                          toast({ title: "Failed to share via Email", variant: "destructive" });
+                        }
+                      }}
+                    >
+                      <Mail className="mr-1.5 h-4 w-4" />
+                      Email
+                    </Button>
+                  </div>
                 </div>
               </DialogFooter>
             </>

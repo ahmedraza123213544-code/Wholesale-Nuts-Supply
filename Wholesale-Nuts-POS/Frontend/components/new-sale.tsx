@@ -2218,20 +2218,20 @@ export function NewSale() {
   }, [quickQtyFocusTick, focusQuantityInput]);
 
   return (
-    <div className="relative flex h-full min-h-0 flex-col lg:flex-row">
+    <div className="relative flex h-screen max-md:h-full max-md:min-h-0 flex-col lg:flex-row">
       {/* Products Section */}
-      <div className="min-h-0 flex-1 overflow-auto p-3 pb-28 sm:p-4 md:p-6 lg:pb-6">
-        <div className="mb-3 md:mb-6">
-          <div className="mb-3 flex flex-col gap-3 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex-1 overflow-auto p-4 md:p-6 max-md:min-h-0 max-md:p-3 max-md:pb-28">
+        <div className="mb-4 md:mb-6">
+          <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">New Sale</h1>
+              <h1 className="text-2xl font-bold text-gray-900 md:text-3xl max-md:text-xl">New Sales</h1>
               {lastTransactionId && (
                 <p className="text-sm text-green-600">
                   Last transaction: {lastTransactionId}
                 </p>
               )}
             </div>
-            <div className="hidden flex-wrap items-center gap-2 lg:flex">
+            <div className="flex flex-wrap items-center gap-2">
               {cart.length > 0 && (
                 <Button
                   variant="outline"
@@ -2260,8 +2260,8 @@ export function NewSale() {
               )}
             </div>
           </div>
-          <div className="flex w-full flex-col items-stretch gap-2 lg:max-w-2xl lg:flex-row lg:flex-wrap">
-            <div className="relative min-w-0 w-full flex-1 lg:max-w-md">
+          <div className="flex w-full max-w-2xl flex-wrap items-stretch gap-2 max-md:max-w-none max-md:flex-col">
+            <div className="relative min-w-[12rem] w-full max-w-md flex-1 max-md:min-w-0 max-md:max-w-none">
               <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${isScanning ? 'text-blue-500 animate-pulse' : 'text-gray-400'}`} />
               {isScanning && (
                 <LoadingSpinner size="sm" className="absolute right-3 top-1/2 transform -translate-y-1/2" />
@@ -2400,7 +2400,7 @@ export function NewSale() {
                   }
                 }}
                 className={cn(
-                  "h-12 pl-10 text-base border-gray-200 shadow-sm focus-visible:ring-1 focus-visible:ring-blue-400 focus-visible:ring-offset-0 lg:h-10 lg:text-sm",
+                  "h-10 pl-10 border-gray-200 shadow-sm focus-visible:ring-1 focus-visible:ring-blue-400 focus-visible:ring-offset-0 max-md:h-12 max-md:text-base",
                   isScanning && "border-blue-500 bg-blue-50/50 pr-10",
                 )}
                 autoFocus
@@ -2449,7 +2449,7 @@ export function NewSale() {
 
             <div
               className={cn(
-                "flex h-12 w-full shrink-0 items-stretch overflow-hidden rounded-md border bg-white shadow-sm transition-opacity lg:h-10 lg:w-[15rem] lg:max-w-[15rem]",
+                "flex h-10 w-full min-w-[13rem] max-w-[15rem] shrink-0 items-stretch overflow-hidden rounded-md border bg-white shadow-sm transition-opacity sm:w-[15rem] max-md:h-12 max-md:max-w-none max-md:min-w-0",
                 quickAdjustLine ? "border-gray-200" : "border-dashed border-gray-200 opacity-40",
               )}
               title={
@@ -2462,7 +2462,7 @@ export function NewSale() {
                 type="button"
                 variant="ghost"
                 disabled={!quickAdjustLine}
-                className="h-12 w-12 shrink-0 rounded-none border-r border-gray-200 px-0 hover:bg-slate-100 disabled:opacity-40 focus-visible:ring-0 focus-visible:ring-offset-0 lg:h-10 lg:w-11"
+                className="h-10 w-11 shrink-0 rounded-none border-r border-gray-200 px-0 hover:bg-slate-100 disabled:opacity-40 focus-visible:ring-0 focus-visible:ring-offset-0 max-md:h-12 max-md:w-12"
                 aria-label="Decrease quantity"
                 data-quick-qty="true"
                 onClick={() => quickAdjustLine && bumpQuantity(quickAdjustLine.id, -1)}
@@ -2571,7 +2571,7 @@ export function NewSale() {
                 type="button"
                 variant="ghost"
                 disabled={!quickAdjustLine}
-                className="h-12 w-12 shrink-0 rounded-none px-0 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-40 focus-visible:ring-0 focus-visible:ring-offset-0 lg:h-10 lg:w-11"
+                className="h-10 w-11 shrink-0 rounded-none px-0 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-40 focus-visible:ring-0 focus-visible:ring-offset-0 max-md:h-12 max-md:w-12"
                 aria-label="Increase quantity"
                 data-quick-qty="true"
                 onClick={() => quickAdjustLine && bumpQuantity(quickAdjustLine.id, 1)}
@@ -2584,15 +2584,15 @@ export function NewSale() {
 
           {/* Printer info - configured globally in Printer Settings */}
           {receiptPrinter && (
-            <div className="mb-3 hidden items-center gap-2 rounded-xl border border-blue-100 bg-blue-50/60 px-3 py-2 text-sm text-blue-800 lg:mb-4 lg:flex">
+            <div className="mb-4 flex items-center gap-2 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-2.5 text-sm text-blue-800">
               <span className="font-medium">🖨️ {receiptPrinter}</span>
               <span className="text-xs text-blue-600">(change in Printer Settings)</span>
             </div>
           )}
 
         {/* Customer Selection */}
-        <div className="mb-3 rounded-lg border border-gray-200 bg-white p-2 text-black shadow-sm lg:mb-4 lg:p-4">
-          <label className="mb-1.5 hidden text-sm font-bold text-slate-800 lg:mb-2 lg:block">
+        <div className="mb-4 rounded-lg border border-gray-200 bg-white p-4 text-black shadow-sm max-md:mb-3 max-md:p-2">
+          <label className="mb-2 block text-sm font-bold text-slate-800">
             Customer <span className="ml-1 text-[10px] font-medium text-slate-400">(Optional/Required for Credit)</span>
           </label>
           <div className="flex gap-2">
@@ -2615,7 +2615,7 @@ export function NewSale() {
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[min(calc(100vw-2rem),360px)] p-0" align="start">
+              <PopoverContent className="w-[300px] p-0 max-md:w-[min(calc(100vw-2rem),360px)]" align="start">
                 <Command className="border-none shadow-none">
                   <CommandInput placeholder="Search customer by name or phone..." className="h-10" />
                   <CommandList className="max-h-[300px]">
@@ -2717,8 +2717,8 @@ export function NewSale() {
         </div>
 
         {/* Previous Sales */}
-        <div className="mb-3 rounded-lg border border-gray-200 bg-white p-2 text-black shadow-sm lg:mb-4 lg:p-4">
-          <label className="mb-2 hidden text-sm font-bold text-slate-800 lg:block">
+        <div className="mb-4 rounded-lg border border-gray-200 bg-white p-4 text-black shadow-sm max-md:mb-3 max-md:p-2">
+          <label className="mb-2 block text-sm font-bold text-slate-800">
             Previous Sales
             <span className="ml-1 text-[10px] font-medium text-slate-400">
               {selectedCustomer ? "(this customer's bills)" : "(all bills — select a customer to filter)"}
@@ -2737,15 +2737,12 @@ export function NewSale() {
               >
                 <div className="flex items-center gap-2 truncate">
                   <FileText className="h-4 w-4 text-slate-400" />
-                  <span className="truncate text-slate-500">
-                    <span className="lg:hidden">Previous bill</span>
-                    <span className="hidden lg:inline">Select a previous bill to copy products…</span>
-                  </span>
+                  <span className="truncate text-slate-500">Select a previous bill to copy products…</span>
                 </div>
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[min(calc(100vw-2rem),360px)] p-0" align="start">
+            <PopoverContent className="w-[360px] p-0 max-md:w-[min(calc(100vw-2rem),360px)]" align="start">
               {/* shouldFilter=false: the list is already the server-side search result
                   for previousSaleSearchTerm, so cmdk must not re-filter it client-side */}
               <Command className="border-none shadow-none" shouldFilter={false}>
@@ -2870,13 +2867,13 @@ export function NewSale() {
         </Dialog>
 
         {/* Categories */}
-        <div className="-mx-1 mb-4 flex flex-nowrap gap-2 overflow-x-auto px-1 pb-1 touch-pan-x [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mb-6 flex space-x-2 overflow-x-auto max-md:-mx-1 max-md:mb-4 max-md:flex-nowrap max-md:gap-2 max-md:px-1 max-md:pb-1 max-md:touch-pan-x max-md:[scrollbar-width:none] max-md:[-ms-overflow-style:none] max-md:[&::-webkit-scrollbar]:hidden">
           {categories.map((category) => (
             <Button
               key={category.id}
               variant={selectedCategory === category.id ? "default" : "outline"}
               onClick={() => handleCategoryChange(category.id)}
-              className="h-9 shrink-0 snap-start whitespace-nowrap rounded-full px-3.5"
+              className="whitespace-nowrap max-md:h-9 max-md:shrink-0 max-md:rounded-full max-md:px-3.5"
               disabled={productsLoading}
             >
               {productsLoading && selectedCategory === category.id && (
@@ -2889,10 +2886,10 @@ export function NewSale() {
 
         {/* Products Grid */}
         {productsLoading ? (
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 max-md:gap-2.5">
             {Array.from({ length: 10 }).map((_, i) => (
               <Card key={i} className="animate-pulse">
-                <CardContent className="p-3">
+                <CardContent className="p-4 max-md:p-3">
                   <div className="aspect-square bg-gray-200 rounded-lg mb-3" />
                   <div className="h-4 bg-gray-200 rounded mb-2" />
                   <div className="h-4 bg-gray-200 rounded w-2/3 mb-2" />
@@ -2909,7 +2906,7 @@ export function NewSale() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 max-md:gap-2.5">
             {filteredProducts.map((product) => {
               // Find cart items by productId (for separate entries) or id (backward compatibility)
               const cartItems = cart.filter((item) => 
@@ -2920,15 +2917,15 @@ export function NewSale() {
               return (
                 <Card
                   key={product.id}
-                  className="min-h-[4.75rem] cursor-pointer transition-transform active:scale-[0.98] hover:shadow-sm"
+                  className="cursor-pointer transition-shadow hover:shadow-sm max-md:min-h-[4.75rem] max-md:transition-transform max-md:active:scale-[0.98]"
                   onClick={() => handleProductClick(product)}
                 >
-                  <CardContent className="space-y-1.5 p-3">
-                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-gray-900">
+                  <CardContent className="space-y-1 p-2 max-md:space-y-1.5 max-md:p-3">
+                    <h3 className="line-clamp-2 text-xs font-semibold leading-tight text-gray-900 max-md:text-sm max-md:leading-snug">
                       {product.name}
                     </h3>
                     <div className="flex items-center justify-between gap-1">
-                      <span className="whitespace-nowrap text-base font-bold text-blue-600">
+                      <span className="whitespace-nowrap text-sm font-bold text-blue-600 max-md:text-base">
                         Rs {product.price.toLocaleString()}
                         {unitAbbr && (
                           <span className="text-[10px] font-normal text-gray-500">/{unitAbbr}</span>
@@ -2953,7 +2950,7 @@ export function NewSale() {
         <button
           type="button"
           aria-label="Close cart"
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
           onClick={() => setMobileCartOpen(false)}
         />
       )}
@@ -2961,17 +2958,16 @@ export function NewSale() {
       {/* Cart Section — bottom sheet on mobile, sidebar on desktop */}
       <div
         className={cn(
-          "flex flex-col bg-white",
-          "lg:static lg:z-auto lg:h-full lg:w-[min(100%,300px)] lg:shrink-0 lg:border-l lg:border-gray-200 xl:w-[320px]",
-          "fixed inset-x-0 bottom-0 z-50 lg:relative",
+          "flex w-full shrink-0 flex-col border-gray-200 bg-white lg:w-[min(100%,300px)] lg:border-l xl:w-[320px]",
+          "max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-50",
           mobileCartOpen
-            ? "h-[min(88dvh,720px)] rounded-t-2xl shadow-[0_-8px_30px_rgba(15,23,42,0.18)]"
-            : "h-auto",
+            ? "max-md:h-[min(88dvh,720px)] max-md:rounded-t-2xl max-md:shadow-[0_-8px_30px_rgba(15,23,42,0.18)]"
+            : "max-md:h-auto",
         )}
       >
         <button
           type="button"
-          className="flex w-full flex-col border-t border-gray-200 bg-white pt-2 text-left lg:hidden pb-[max(0.25rem,env(safe-area-inset-bottom))]"
+          className="flex w-full flex-col border-t border-gray-200 bg-white pt-2 text-left md:hidden pb-[max(0.25rem,env(safe-area-inset-bottom))]"
           onClick={() => setMobileCartOpen((open) => !open)}
         >
           <span className="mx-auto h-1 w-10 rounded-full bg-gray-300" />
@@ -3017,7 +3013,7 @@ export function NewSale() {
         <div
           className={cn(
             "min-h-0 flex-1 flex-col",
-            mobileCartOpen ? "flex" : "hidden lg:flex",
+            mobileCartOpen ? "flex" : "hidden md:flex",
           )}
         >
 

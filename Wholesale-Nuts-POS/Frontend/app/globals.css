@@ -126,12 +126,6 @@ html {
   .pos-filters {
     @apply grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4;
   }
-
-  /* Prevent dialogs that set max-w-4xl from blowing past the phone edge */
-  [role="dialog"],
-  [role="alertdialog"] {
-    max-width: min(100vw - 1.25rem, var(--dialog-max, 56rem));
-  }
 }
 
 @layer base {
@@ -355,8 +349,17 @@ html {
     max-height: 96dvh !important;
     transform: none !important;
     margin: 0 !important;
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
+    border-radius: 1rem 1rem 0 0 !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .pos-dialog.p-0,
+  .pos-dialog[class*="p-0"] {
+    padding: 0 !important;
   }
 
   .pos-dialog input,

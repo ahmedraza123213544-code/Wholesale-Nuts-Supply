@@ -44,7 +44,7 @@ function FieldError({ message }: { message?: string }) {
 }
 
 const EMPLOYEE_DIALOG_CLASS =
-  "sm:max-w-2xl w-full max-h-[96dvh] sm:max-h-[min(90vh,720px)] flex flex-col gap-0 p-0 overflow-hidden"
+  "sm:max-w-2xl w-[calc(100vw-2rem)] max-h-[min(90vh,720px)] flex flex-col gap-0 p-0 overflow-hidden translate-y-[-50%] top-[50%]"
 
 function FormField({
   label,

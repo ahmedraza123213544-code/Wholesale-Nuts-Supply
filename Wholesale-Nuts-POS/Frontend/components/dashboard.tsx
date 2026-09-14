@@ -69,7 +69,7 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
-const FULL_HEIGHT_VIEWS = new Set(["new-sale", "supplier-profile", "supplier-ledger", "customer-ledger"]);
+const FULL_HEIGHT_VIEWS = new Set(["supplier-profile", "supplier-ledger", "customer-ledger"]);
 
 export function Dashboard({ onLogout }: DashboardProps) {
   const DASHBOARD_TAB_STORAGE_KEY = "dashboard_active_tab";
@@ -313,7 +313,11 @@ export function Dashboard({ onLogout }: DashboardProps) {
       <main
         className={cn(
           "flex min-h-0 flex-1 flex-col bg-gray-50 pt-16 lg:pt-0",
-          FULL_HEIGHT_VIEWS.has(activeTab) ? "overflow-hidden" : "overflow-auto",
+          activeTab === "new-sale"
+            ? "max-md:overflow-hidden overflow-auto"
+            : FULL_HEIGHT_VIEWS.has(activeTab)
+              ? "overflow-hidden"
+              : "overflow-auto",
         )}
       >
         {renderContent()}

@@ -1,7 +1,7 @@
 import { siteConfig } from "@/lib/site-data";
 import { SITE_URL } from "@/config/constants";
 
-const WHATSAPP_NUMBER = "923423344040";
+const WHATSAPP_NUMBER = "923362500357";
 
 export function getWhatsAppQuoteUrl(product: {
   name: string;
@@ -22,7 +22,7 @@ export function getWhatsAppQuoteUrl(product: {
   if (product.category) lines.push(`• Category: ${product.category}`);
   if (product.grade) lines.push(`• Grade: ${product.grade}`);
   if (product.slug) {
-    lines.push(`• Product link: ${siteUrl}/products/${product.slug}`);
+    lines.push(`• Product link: ${siteUrl}/products/details/?slug=${product.slug}`);
   }
 
   lines.push(

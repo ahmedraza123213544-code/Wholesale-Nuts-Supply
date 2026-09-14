@@ -9,6 +9,7 @@ import { Reveal, StaggerReveal } from "@/components/animations/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { fetchProducts } from "@/lib/product-api";
+import { productImageSrc } from "@/lib/product-image";
 import type { CatalogProduct } from "@/lib/products";
 
 export function ProductsSection() {
@@ -83,10 +84,10 @@ export function ProductsSection() {
                 transition={{ type: "spring", stiffness: 320, damping: 24 }}
                 className="group opacity-0 overflow-hidden rounded-2xl border border-forest/10 bg-white shadow-[0_24px_60px_-36px_rgba(11,48,34,0.45)]"
               >
-                <Link href={`/products/${product.slug}`} className="block">
+                <Link href={`/products/details/?slug=${encodeURIComponent(product.slug)}`} className="block">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <Image
-                      src={product.image}
+                      src={productImageSrc(product)}
                       alt={product.name}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"

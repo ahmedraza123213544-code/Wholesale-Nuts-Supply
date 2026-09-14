@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { CatalogProduct } from "@/lib/products";
 import { getWhatsAppQuoteUrl } from "@/lib/whatsapp";
+import { productImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 
 type ProductCardProps = {
@@ -37,7 +38,7 @@ export function ProductCard({
         className
       )}
     >
-      <Link href={`/products/${product.slug}`} className="block">
+      <Link href={`/products/details/?slug=${encodeURIComponent(product.slug)}`} className="block">
         <div
           className={cn(
             "relative overflow-hidden",
@@ -45,7 +46,7 @@ export function ProductCard({
           )}
         >
           <Image
-            src={product.image}
+            src={productImageSrc(product)}
             alt={product.name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
@@ -109,7 +110,7 @@ export function ProductCard({
           </div>
           <div className="flex gap-2">
             <Button asChild size="sm" variant="darkOutline">
-              <Link href={`/products/${product.slug}`}>View</Link>
+              <Link href={`/products/details/?slug=${encodeURIComponent(product.slug)}`}>View</Link>
             </Button>
             <Button asChild size="sm">
               <a href={quoteUrl} target="_blank" rel="noopener noreferrer">

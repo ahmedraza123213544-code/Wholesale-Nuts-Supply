@@ -9,6 +9,7 @@ import { ProductCard } from "@/components/products/product-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { CatalogProduct } from "@/lib/products";
+import { productImageSrc } from "@/lib/product-image";
 import { getWhatsAppQuoteUrl } from "@/lib/whatsapp";
 
 type ProductDetailViewProps = {
@@ -41,7 +42,7 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
             >
               <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem]">
                 <Image
-                  src={product.image}
+                  src={productImageSrc(product)}
                   alt={product.name}
                   fill
                   priority
@@ -51,13 +52,18 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
               </div>
               <div className="grid grid-cols-3 gap-3">
-                {product.gallery.slice(0, 3).map((image, index) => (
+                {(product.gallery.length
+                  ? product.gallery
+                  : [productImageSrc(product)]
+                )
+                  .slice(0, 3)
+                  .map((image, index) => (
                   <div
                     key={`${image}-${index}`}
                     className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10"
                   >
                     <Image
-                      src={image}
+                      src={productImageSrc(image)}
                       alt={`${product.name} gallery ${index + 1}`}
                       fill
                       sizes="180px"

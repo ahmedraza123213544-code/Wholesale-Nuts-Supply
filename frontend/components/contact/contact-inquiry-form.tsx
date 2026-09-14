@@ -255,7 +255,7 @@ export function ContactInquiryForm() {
                     id="phone"
                     value={values.phone}
                     onChange={(e) => update("phone", e.target.value)}
-                    placeholder="+92 342 3344040"
+                    placeholder="0336 2500357"
                     aria-invalid={Boolean(errors.phone)}
                   />
                 </Field>

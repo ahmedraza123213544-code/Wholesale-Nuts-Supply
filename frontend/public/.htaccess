@@ -1,0 +1,20 @@
+# Hostinger Apache — Next.js static export
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Don't rewrite real files or directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Pretty product URLs → client details page (Hostinger-safe)
+  # /products/1001/ → /products/details/?slug=1001
+  RewriteRule ^products/(?!details)([^/]+)/?$ /products/details/?slug=$1 [L,QSA,R=302]
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType text/javascript .js
+  AddType text/css .css
+  AddType application/json .json
+</IfModule>

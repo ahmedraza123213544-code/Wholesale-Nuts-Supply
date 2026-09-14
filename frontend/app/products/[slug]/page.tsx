@@ -1,44 +1,19 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { ProductDetailView } from "@/components/products/product-detail-view";
-import { fetchProductBySlug, fetchProducts } from "@/lib/product-api";
-import { siteConfig } from "@/lib/site-data";
-
-type ProductPageProps = {
-  params: Promise<{ slug: string }>;
-};
+import { ProductSlugRedirect } from "./redirect-client";
+import { fetchProducts } from "@/lib/product-api";
 
 export async function generateStaticParams() {
   try {
     const products = await fetchProducts();
     return products.map((product) => ({ slug: product.slug }));
-  } catch {
-    return [];
+  } catch (err) {
+    console.warn("[generateStaticParams] products fetch failed:", err);
+    return [{ slug: "placeholder" }];
   }
 }
 
-export async function generateMetadata({
-  params,
-}: ProductPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  try {
-    const { product } = await fetchProductBySlug(slug);
-    return {
-      title: `${product.name} | ${siteConfig.name}`,
-      description: product.shortDescription,
-    };
-  } catch {
-    return { title: `Product | ${siteConfig.name}` };
-  }
-}
+type Props = { params: Promise<{ slug: string }> };
 
-export default async function ProductDetailPage({ params }: ProductPageProps) {
+export default async function ProductSlugPage({ params }: Props) {
   const { slug } = await params;
-
-  try {
-    const { product, related } = await fetchProductBySlug(slug);
-    return <ProductDetailView product={product} related={related} />;
-  } catch {
-    notFound();
-  }
+  return <ProductSlugRedirect slug={slug} />;
 }

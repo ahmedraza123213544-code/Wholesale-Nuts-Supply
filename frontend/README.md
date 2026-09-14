@@ -38,8 +38,8 @@ yarn build
 ```
 
 This creates:
-- `out/` — static site files
+- `out/` — static site files (includes `.htaccess`)
 - `out.zip` — same files zipped (old zip is replaced every build)
 
-The production backend URL from `config/constants.ts` is baked into the zip at build time.
-Upload/extract `out.zip` into your Hostinger `public_html` folder.
+Upload/extract **`out.zip`** into Hostinger `public_html` (replace old files).
+Product pages use `/products/details/?slug=...` so new POS products work without a broken Hostinger 404.

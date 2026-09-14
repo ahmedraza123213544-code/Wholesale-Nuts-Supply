@@ -69,6 +69,7 @@ export class ReportsService {
       },
       include: {
         category: true,
+        unit: { select: { id: true, name: true, code: true } },
       },
     });
 
@@ -84,6 +85,7 @@ export class ReportsService {
         price: Number(product?.sales_rate_inc_dis_and_tax || product?.sales_rate_exc_dis_and_tax || 0),
         purchase_rate: Number(product?.purchase_rate || 0),
         category: product?.category?.name || 'Uncategorized',
+        unit: product?.unit?.name || product?.unit?.code || '',
       };
     });
   }

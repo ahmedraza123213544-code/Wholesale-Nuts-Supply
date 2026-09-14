@@ -267,7 +267,7 @@ class SaleService {
 
     const include = {
       sale_items: {
-        include: { product: true },
+        include: { product: { include: { unit: { select: { id: true, name: true, code: true } } } } },
       },
       customer: true,
       branch: {
@@ -426,7 +426,7 @@ class SaleService {
       },
       include: {
         sale_items: {
-          include: { product: true },
+          include: { product: { include: { unit: { select: { id: true, name: true, code: true } } } } },
         },
         customer: true,
       },
@@ -1882,7 +1882,7 @@ class SaleService {
           customer_id: newCustomerId,
           sale_items: { create: saleItemsData },
         },
-        include: { sale_items: { include: { product: true } }, customer: true },
+        include: { sale_items: { include: { product: { include: { unit: { select: { id: true, name: true, code: true } } } } } }, customer: true },
       });
 
       return updatedSale;

@@ -16,6 +16,7 @@ import {
 } from "@/lib/reporting-period"
 import { useToast } from "@/hooks/use-toast"
 import { shareAnalyticsReportOnEmail } from "@/lib/pdf-generator"
+import { formatQtyWithUnit } from "@/lib/units"
 
 interface DailySale {
   date: string
@@ -29,6 +30,7 @@ interface TopProduct {
   quantity: number
   revenue: number
   percentage: number
+  unit?: string
 }
 
 interface CategorySale {
@@ -193,7 +195,8 @@ export function Reports() {
           revenue: revenue,
           cogs: cogs,
           margin: margin,
-          percentage: percentage
+          percentage: percentage,
+          unit: product.unit || product.unit_name || product.unitName || "",
         }
       })
       setTopProducts(formattedTopProducts)
@@ -286,7 +289,8 @@ export function Reports() {
                   topProducts: topProducts.map(p => ({
                     name: p.name,
                     revenue: p.revenue,
-                    quantity: p.quantity
+                    quantity: p.quantity,
+                    unit: p.unit,
                   }))
                 });
                 toast({ title: "Report shared successfully" });
@@ -475,7 +479,7 @@ export function Reports() {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">{product.name}</p>
-                      <p className="text-sm text-gray-500">{product.quantity} units sold</p>
+                      <p className="text-sm text-gray-500">{formatQtyWithUnit(product.quantity, product.unit)} sold</p>
                     </div>
                   </div>
                     <div className="text-right flex flex-col gap-1 items-end">

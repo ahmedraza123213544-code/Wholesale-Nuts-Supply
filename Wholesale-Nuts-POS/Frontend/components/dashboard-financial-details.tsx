@@ -73,10 +73,10 @@ interface DashboardFinancialDetailsProps {
 }
 
 const TAB_CONFIG: Array<{ id: string; mode: DetailMode; label: string; icon: LucideIcon }> = [
-  { id: "today-revenue", mode: "revenue", label: "Today Revenue", icon: Banknote },
-  { id: "today-cash-sales", mode: "cash", label: "Today Cash Sales", icon: DollarSign },
-  { id: "today-credit-sales", mode: "credit", label: "Today Credit Sales", icon: CreditCard },
-  { id: "today-expenses", mode: "expenses", label: "Today Expenses", icon: Receipt },
+  { id: "today-revenue", mode: "revenue", label: "Today's Revenue", icon: Banknote },
+  { id: "today-cash-sales", mode: "cash", label: "Today's Cash Sales", icon: DollarSign },
+  { id: "today-credit-sales", mode: "credit", label: "Today's Credit Sales", icon: CreditCard },
+  { id: "today-expenses", mode: "expenses", label: "Today's Expenses", icon: Receipt },
 ];
 
 const MODE_META: Record<
@@ -84,28 +84,28 @@ const MODE_META: Record<
   { heading: string; sub: string; tone: string; badge: string; icon: LucideIcon }
 > = {
   revenue: {
-    heading: "Today Revenue",
+    heading: "Today's Revenue",
     sub: `All completed sales · ${getReportingPeriodDescription()}`,
     tone: "text-blue-700",
     badge: "bg-blue-100 text-blue-800 border-blue-200",
     icon: Banknote,
   },
   cash: {
-    heading: "Today Cash Sales",
+    heading: "Today's Cash Sales",
     sub: `Cash/card sales and ledger payments · ${getReportingPeriodDescription()}`,
     tone: "text-emerald-700",
     badge: "bg-emerald-100 text-emerald-800 border-emerald-200",
     icon: Wallet,
   },
   credit: {
-    heading: "Today Credit Sales",
+    heading: "Today's Credit Sales",
     sub: `Credit invoices · ${getReportingPeriodDescription()}`,
     tone: "text-amber-700",
     badge: "bg-amber-100 text-amber-800 border-amber-200",
     icon: CreditCard,
   },
   expenses: {
-    heading: "Today Expenses",
+    heading: "Today's Expenses",
     sub: `Outgoing cash · ${getReportingPeriodDescription()}`,
     tone: "text-red-700",
     badge: "bg-red-100 text-red-800 border-red-200",

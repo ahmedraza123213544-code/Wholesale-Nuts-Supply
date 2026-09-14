@@ -2,6 +2,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import { formatQtyWithUnit } from '../utils/units';
 import PDFDocument from 'pdfkit';
 import { print } from 'pdf-to-printer';
 import * as bwipjs from 'bwip-js';
@@ -20,7 +21,7 @@ type PrintJobInput = {
     cashier?: string;
     customerType?: string;
     customerPhone?: string;
-    items: Array<{ name: string; quantity: number; price: number; unit?: string }>;
+    items: Array<{ name: string; quantity: number; price: number; unit?: string; unitName?: string }>;
     subtotal: number;
     discount?: number;
     taxPercent?: number;
@@ -266,7 +267,7 @@ export async function printReceiptPDF(input: PrintJobInput) {
   // ===== ITEMS =====
   for (const it of receiptData.items || []) {
     const name = String(it.name || '');
-    const qty  = (it.quantity ?? 0).toString() + (it.unit ? ` ${it.unit}` : '');
+    const qty  = formatQtyWithUnit(Number(it.quantity ?? 0), it.unit || it.unitName);
     const rate = `${money(Number(it.price || 0) * Number(it.quantity || 0))}`;
     const lh = rowIQR(name, qty, rate, y);
     y += lh;

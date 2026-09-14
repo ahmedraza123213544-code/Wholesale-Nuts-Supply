@@ -1,6 +1,7 @@
 import { parseISO } from "date-fns";
 import type { InvoiceData } from "@/lib/pdf-generator";
 import { creditLedgerFields } from "@/lib/credit-sale-ledger";
+import { resolveItemUnit } from "@/lib/units";
 
 export function mapSaleToInvoiceData(sale: Record<string, unknown>): InvoiceData {
   const subtotal = parseFloat(String(sale.subtotal ?? "0"));
@@ -10,8 +11,6 @@ export function mapSaleToInvoiceData(sale: Record<string, unknown>): InvoiceData
   const items = ((sale.sale_items as unknown[]) || []).map((raw) => {
     const item = raw as Record<string, unknown>;
     const product = item.product as Record<string, unknown> | undefined;
-    const unit = item.unit as Record<string, unknown> | undefined;
-    const productUnit = product?.unit as Record<string, unknown> | undefined;
     const lineTotal = parseFloat(String(item.line_total ?? "0"));
     const qty = Number(item.quantity ?? 0);
     const unitPrice =
@@ -19,11 +18,7 @@ export function mapSaleToInvoiceData(sale: Record<string, unknown>): InvoiceData
         ? parseFloat(String(item.unit_price))
         : lineTotal / Math.max(1, qty);
 
-    const unitLabel =
-      (productUnit?.name as string) ||
-      (unit?.name as string) ||
-      (item.unit_name as string) ||
-      "pcs";
+    const unitLabel = resolveItemUnit(item);
 
     return {
       name: (product?.name as string) || "Unnamed Item",

@@ -32,6 +32,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import apiClient from "@/lib/apiClient"
 import { offlineDB } from "@/lib/offline-db"
 import { downloadReturnNote, printReturnNote, shareReturnNoteOnWhatsApp, shareReturnNoteOnEmail, type ReturnNoteData } from "@/lib/pdf-generator"
+import { formatQtyWithUnit, resolveItemUnit } from "@/lib/units"
 import { Share2, Mail, ArrowLeftRight, Package } from "lucide-react"
 import {
   RETURN_REASONS,
@@ -184,6 +185,7 @@ interface SelectedReturnItem {
   alreadyReturned?: number
   returnQuantity: number
   unitPrice: number
+  unit?: string
   /** Whether this product is included in the return (unchecked = excluded) */
   included: boolean
   disposition: InventoryDisposition
@@ -1043,6 +1045,7 @@ export function Returns({ module = "returns" }: { module?: ReturnsModule }) {
           name: ri.productName || ri.productId,
           qty: Number(ri.returnQuantity),
           price: Number(ri.unitPrice) || 0,
+          unit: ri.unit,
         }))
       const exchItems = exchangeItems.map(ei => ({
         name: ei.productName,
@@ -1192,6 +1195,7 @@ export function Returns({ module = "returns" }: { module?: ReturnsModule }) {
           alreadyReturned: item.quantity_already_returned,
           returnQuantity: maxReturnable,
           unitPrice: getNetUnitPrice(fresh, item.unit_price),
+          unit: resolveItemUnit(item),
           included: true,
           disposition: "RESTOCK" as InventoryDisposition,
         }
@@ -1227,6 +1231,7 @@ export function Returns({ module = "returns" }: { module?: ReturnsModule }) {
             alreadyReturned: item.quantity_already_returned,
             returnQuantity: maxReturnable,
             unitPrice: getNetUnitPrice(cached, item.unit_price),
+            unit: resolveItemUnit(item),
             included: true,
             disposition: "RESTOCK" as InventoryDisposition,
           }
@@ -2847,8 +2852,8 @@ function buildReturnNoteHtml(d: {
   originalSaleNumber: string
   customerName?: string
   customerPhone?: string
-  returnedItems: Array<{ name: string; qty: number; price: number }>
-  exchangedItems: Array<{ name: string; qty: number; price: number }>
+  returnedItems: Array<{ name: string; qty: number; price: number; unit?: string }>
+  exchangedItems: Array<{ name: string; qty: number; price: number; unit?: string }>
   refundTotal: number
   exchangeTotal: number
   netAmount: number
@@ -2862,7 +2867,7 @@ function buildReturnNoteHtml(d: {
       <tr>
         <td style="padding: 4px 0; font-size: 12px; text-align: center; width: 40px;">${rowIndex}</td>
         <td style="padding: 4px 0; font-size: 12px;">${label}: ${it.name}</td>
-        <td style="padding: 4px 0; font-size: 12px; text-align: center;">${it.qty}</td>
+        <td style="padding: 4px 0; font-size: 12px; text-align: center;">${formatQtyWithUnit(it.qty, it.unit)}</td>
         <td style="padding: 4px 0; font-size: 12px; text-align: right;">${it.price.toFixed(2)}</td>
         <td style="padding: 4px 0; font-size: 12px; text-align: right; font-weight: 600;">${(it.qty * it.price).toFixed(2)}</td>
       </tr>

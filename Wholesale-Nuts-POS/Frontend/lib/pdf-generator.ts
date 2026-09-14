@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import { format } from 'date-fns';
+import { formatQtyWithUnit } from '@/lib/units';
 
 // Loads logo via canvas to strip problematic PNG metadata (e.g. C2PA/Samsung credentials)
 // that cause jsPDF addImage to throw. Falls back gracefully.
@@ -85,6 +86,7 @@ export interface AnalyticsReportData {
     name: string;
     revenue: number;
     quantity: number;
+    unit?: string;
   }>;
 }
 
@@ -232,7 +234,7 @@ const buildInvoiceDoc = (data: InvoiceData, logoDataUrl: string | null): jsPDF =
     }
     doc.text(String(index + 1), snoX, currentY);
     doc.text(item.name, descX, currentY);
-    doc.text(item.quantity.toString(), qtyX, currentY, { align: 'center' });
+    doc.text(formatQtyWithUnit(item.quantity, item.unit), qtyX, currentY, { align: 'center' });
     doc.text(formatAmount(item.price), priceX, currentY, { align: 'right' });
     doc.text(formatAmount(item.lineTotal), amountX, currentY, { align: 'right' });
     currentY += rowHeight;
@@ -514,7 +516,7 @@ const buildReturnNoteDoc = (data: ReturnNoteData, logoDataUrl: string | null): j
     }
     doc.text(String(index + 1), rnSnoX, currentY);
     doc.text(`${item.type}: ${item.name}`, rnDescX, currentY);
-    doc.text(item.qty.toString(), rnQtyX, currentY, { align: 'center' });
+    doc.text(formatQtyWithUnit(item.qty, item.unit), rnQtyX, currentY, { align: 'center' });
     doc.text(formatAmount(item.price), rnPriceX, currentY, { align: 'right' });
     doc.text(formatAmount(item.qty * item.price), rnAmountX, currentY, { align: 'right' });
     currentY += rowHeight;
@@ -665,8 +667,8 @@ export interface ReturnNoteData {
   customerName?: string;
   customerPhone?: string;
   date: Date;
-  returnedItems: Array<{ name: string; qty: number; price: number }>;
-  exchangedItems: Array<{ name: string; qty: number; price: number }>;
+  returnedItems: Array<{ name: string; qty: number; price: number; unit?: string }>;
+  exchangedItems: Array<{ name: string; qty: number; price: number; unit?: string }>;
   refundTotal: number;
   exchangeTotal: number;
   netAmount: number; // negative = net refund, positive = customer pays
@@ -895,7 +897,7 @@ export const shareAnalyticsReportOnEmail = async (data: AnalyticsReportData): Pr
   data.topProducts.forEach((p, i) => {
     doc.text(`${i+1}. ${p.name}`, 15, y);
     doc.text(`Rs ${p.revenue.toLocaleString()}`, 120, y);
-    doc.text(`${p.quantity} units`, 160, y);
+    doc.text(`${formatQtyWithUnit(p.quantity, p.unit)} sold`, 160, y);
     y += 8;
   });
 

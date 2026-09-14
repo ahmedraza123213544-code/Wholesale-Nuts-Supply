@@ -1394,7 +1394,12 @@ export function NewSale() {
     return {
       transactionId,
       timestamp: new Date().toISOString(),
-      items: cart,
+      items: cart.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: getSellingPrice(item),
+        unit: item.unitName || (typeof item.unit === "string" ? item.unit : "") || "",
+      })),
       subtotal,
       total,
       paymentMethod,
@@ -1744,7 +1749,7 @@ export function NewSale() {
             quantity: item.quantity,
             price: getSellingPrice(item),
             lineTotal: getSellingPrice(item) * item.quantity,
-            unit: (item as any)?.unit?.name || (item as any)?.unitName || "",
+            unit: item.unitName || (typeof item.unit === "string" ? item.unit : (item as any)?.unit?.name) || "",
           })),
           subtotal: subtotal,
           discount: globalDiscountAmount,

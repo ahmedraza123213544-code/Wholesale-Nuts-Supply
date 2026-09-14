@@ -508,7 +508,7 @@ export function DashboardHome({ onNavigate }: DashboardHomeProps) {
         ) : (
           <>
             <DashboardStatCard
-              title="Total Revenue (Today)"
+              title="Today's Revenue"
               value={formatCurrency(stats?.dailyRevenue || 0)}
               subtitle={`All completed sales · ${moneyScopeLabel}`}
               linkLabel="Open revenue page"
@@ -517,7 +517,7 @@ export function DashboardHome({ onNavigate }: DashboardHomeProps) {
               onClick={onNavigate ? () => goTo("today-revenue") : undefined}
             />
             <DashboardStatCard
-              title="Cash Received (Today)"
+              title="Today's Cash Received"
               value={formatCurrency(stats?.dailyCashReceived || 0)}
               subtitle={`Cash/card sales + ledger payments · ${moneyScopeLabel}`}
               linkLabel="Open cash sales page"
@@ -526,7 +526,7 @@ export function DashboardHome({ onNavigate }: DashboardHomeProps) {
               onClick={onNavigate ? () => goTo("today-cash-sales") : undefined}
             />
             <DashboardStatCard
-              title="Credit Sales (Today)"
+              title="Today's Credit Sales"
               value={formatCurrency(stats?.dailyCredit || 0)}
               subtitle={`Credit invoices created · ${moneyScopeLabel}`}
               linkLabel="Open credit sales page"
@@ -535,7 +535,7 @@ export function DashboardHome({ onNavigate }: DashboardHomeProps) {
               onClick={onNavigate ? () => goTo("today-credit-sales") : undefined}
             />
             <DashboardStatCard
-              title="Expenses (Today)"
+              title="Today's Expenses"
               value={formatCurrency(stats?.dailyExpense || 0)}
               subtitle={`Outgoing cash · ${moneyScopeLabel}`}
               linkLabel="Open expenses page"

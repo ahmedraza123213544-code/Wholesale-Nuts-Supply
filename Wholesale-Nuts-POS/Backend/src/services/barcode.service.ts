@@ -4,6 +4,7 @@ import { logger } from '../utils/logger';
 import util from 'util';
 const execFileAsync = util.promisify(execFile);
 import { ThermalPrinter, PrinterTypes } from 'node-thermal-printer';
+import { formatQtyWithUnit } from '../utils/units';
 const PrinterDriver = require('node-printer');
 
 const execAsync = promisify(exec);
@@ -415,9 +416,9 @@ export class BarcodeService {
     await tp.drawLine();
     for (const it of receiptData.items || []) {
       const name = String(it.name ?? '').slice(0, columns.fontA); // clip
-      const qty = (it.quantity ?? 0).toString();
+      const qty = formatQtyWithUnit(Number(it.quantity ?? 0), it.unit || it.unitName);
       const amt = `PKR ${(Number(it.price ?? 0) * Number(it.quantity ?? 0)).toFixed(2)}`;
-      await tp.println(twoCol(`${name} ${qty}x`, amt));
+      await tp.println(twoCol(`${name} ${qty}`, amt));
       // Long name on next line if clipped:
       if (it.name && it.name.length > name.length) {
         await tp.println(it.name);

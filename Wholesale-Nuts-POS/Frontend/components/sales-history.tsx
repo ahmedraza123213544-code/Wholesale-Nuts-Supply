@@ -65,6 +65,7 @@ import { printReceiptViaServer, type ReceiptData } from "@/lib/print-server";
 import { usePrinterSettings } from "@/hooks/use-printer-settings";
 import { downloadA4Invoice, generateA4InvoicePDF, printA4Invoice, shareOnEmail, shareOnWhatsApp, type InvoiceData } from "@/lib/pdf-generator";
 import { creditLedgerFields } from "@/lib/credit-sale-ledger";
+import { formatQtyWithUnit, resolveItemUnit } from "@/lib/units";
 import { useStore } from "@/lib/store";
 import { SaleEditor } from "./sale-editor";
 import {
@@ -514,13 +515,7 @@ export function SalesHistory() {
           ? parseFloat(item.unit_price)
           : lineTotal / Math.max(1, item.quantity);
 
-      const unitLabel =
-        (item.product as any)?.unit?.name ||
-        (item.product as any)?.unit_name ||
-        (item as any)?.unit?.name ||
-        (item as any)?.unit_name ||
-        (item as any)?.unitName ||
-        undefined;
+      const unitLabel = resolveItemUnit(item);
 
       return {
         name: item.product?.name || "Unnamed Item",
@@ -553,11 +548,7 @@ export function SalesHistory() {
       const lineTotal = parseFloat(item.line_total || "0");
       const unitPrice = item.unit_price !== undefined ? parseFloat(item.unit_price) : (lineTotal / Math.max(1, item.quantity));
       
-      const unitLabel = 
-        (item.product as any)?.unit?.name || 
-        (item as any)?.unit?.name || 
-        (item as any)?.unit_name || 
-        "pcs";
+      const unitLabel = resolveItemUnit(item);
 
       return {
         name: item.product?.name || "Unnamed Item",
@@ -612,7 +603,7 @@ export function SalesHistory() {
         <tr>
           <td style="padding: 4px 0; font-size: 12px; text-align: center; width: 40px;">${idx + 1}</td>
           <td style="padding: 4px 0; font-size: 12px;">${item.name}</td>
-          <td style="padding: 4px 0; font-size: 12px; text-align: center;">${item.quantity}</td>
+          <td style="padding: 4px 0; font-size: 12px; text-align: center;">${formatQtyWithUnit(item.quantity, item.unit)}</td>
           <td style="padding: 4px 0; font-size: 12px; text-align: right;">${item.price.toFixed(2)}</td>
           <td style="padding: 4px 0; font-size: 12px; text-align: right; font-weight: 600;">${item.lineTotal.toFixed(2)}</td>
         </tr>
@@ -999,12 +990,17 @@ export function SalesHistory() {
   // Fetch single sale (simulate API call, but use local data for now)
   const handleViewSale = async (saleId: string) => {
     setViewLoading(true);
-    // Simulate API call delay
-    const sale = sales.find((s) => s.id === saleId) || null;
-    setTimeout(() => {
-      setViewSale(sale);
+    try {
+      const res = await apiClient.get(`/sale/${saleId}`);
+      const payload = (res.data as { data?: Sale })?.data ?? res.data;
+      const full = payload as Sale;
+      setViewSale(full?.id ? full : sales.find((s) => s.id === saleId) || null);
+    } catch (err) {
+      console.error("Failed to load sale for receipt:", err);
+      setViewSale(sales.find((s) => s.id === saleId) || null);
+    } finally {
       setViewLoading(false);
-    }, 300); // Simulate network delay
+    }
   };
 
   const closeViewModal = () => {
@@ -1017,6 +1013,7 @@ export function SalesHistory() {
       const invoiceData = mapSaleToInvoiceData(viewSale);
       const htmlContent = generatePremiumInvoiceHtml(invoiceData);
       setReceiptHtml(htmlContent);
+      setReceiptData(prepareReceiptDataFromSale(viewSale, branchInfo));
     } else {
       setReceiptHtml("");
       setReceiptData(null);

@@ -12,11 +12,14 @@ type CategoriesResponse = {
   }>;
 };
 
-export async function fetchProducts(params?: {
-  category?: string;
-  featured?: boolean;
-  q?: string;
-}) {
+export async function fetchProducts(
+  params?: {
+    category?: string;
+    featured?: boolean;
+    q?: string;
+  },
+  init?: RequestInit
+) {
   const search = new URLSearchParams();
   if (params?.category && params.category !== "All") {
     search.set("category", params.category);
@@ -25,13 +28,14 @@ export async function fetchProducts(params?: {
   if (params?.q) search.set("q", params.q);
   const query = search.toString();
   const payload = await apiFetch<ProductsResponse>(
-    `/api/products${query ? `?${query}` : ""}`
+    `/api/products${query ? `?${query}` : ""}`,
+    init
   );
   return payload.data;
 }
 
-export async function fetchProductBySlug(slug: string) {
-  const payload = await apiFetch<ProductResponse>(`/api/products/${slug}`);
+export async function fetchProductBySlug(slug: string, init?: RequestInit) {
+  const payload = await apiFetch<ProductResponse>(`/api/products/${slug}`, init);
   return {
     product: payload.data,
     related: payload.related || [],

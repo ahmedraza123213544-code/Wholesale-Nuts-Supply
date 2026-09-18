@@ -2,10 +2,10 @@
 // Flip API_BASE below to switch local vs production. This file is the source of truth.
 
 // Production backend (Vercel)
-// export const API_BASE = "https://wholesale-nuts-supply-7bs3.vercel.app";
+export const API_BASE = "https://wholesale-nuts-supply-7bs3.vercel.app";
 
 // Local backend
-export const API_BASE = "http://localhost:5000";
+// export const API_BASE = "http://localhost:5000";
 
 export const API_URL = API_BASE.replace(/\/$/, "");
 

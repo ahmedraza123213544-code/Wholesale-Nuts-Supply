@@ -14,7 +14,10 @@ export async function apiFetch<T>(
       "Content-Type": "application/json",
       ...(init?.headers || {}),
     },
-    cache: "no-store",
+    // Defaults to always-fresh client-side reads; SSG call sites (metadata,
+    // sitemap) pass `cache: "force-cache"` since `output: "export"` can't
+    // render a "no-store" fetch statically (Next throws NEXT_STATIC_GEN_BAILOUT).
+    cache: init?.cache ?? "no-store",
   });
 
   const payload = await response.json().catch(() => ({}));

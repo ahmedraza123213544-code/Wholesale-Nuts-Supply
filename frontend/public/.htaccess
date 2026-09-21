@@ -18,3 +18,18 @@
   AddType text/css .css
   AddType application/json .json
 </IfModule>
+
+# Next.js static export (`output: "export"`) can't set HTTP response
+# headers itself — there's no server process at request time — so the
+# X-Robots-Tag header has to be added at the Apache layer instead.
+<IfModule mod_rewrite.c>
+  # Flag the client-rendered product-details fallback page so it can be
+  # kept out of the index at the HTTP layer too (it already carries
+  # <meta name="robots" content="noindex, follow">; this backs it up).
+  RewriteRule ^products/details/?$ - [E=NOINDEX_PAGE:1]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "index, follow"
+  Header set X-Robots-Tag "noindex, follow" env=NOINDEX_PAGE
+</IfModule>

@@ -28,6 +28,7 @@ export const REPORTING_TIMEZONE: string = REPORTING_CONFIG.timezone;
 export const API_ENDPOINTS = {
   PRODUCTS: `${API_BASE}/products`, // GET - Get all products (supports fetch_all)
   PRODUCT_EXPORT_EXCEL: `${API_BASE}/products/export/excel`, // GET - Export filtered products to Excel
+  PRODUCT_EXPORT_PDF: `${API_BASE}/products/export/pdf`, // GET - Export filtered products to PDF catalog
   PRODUCTS_PUBLIC: `${API_BASE}/customer/app/products`, // GET - Search/get products (public/customer)
   PRODUCT_FEATURED: `${API_BASE}/products/featured`, // GET - Get featured products
   PRODUCT_BEST_SELLING: `${API_BASE}/products/best-selling`, // GET - Get best selling products

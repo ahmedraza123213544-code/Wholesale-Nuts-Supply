@@ -6,6 +6,7 @@ import {
   toggleProductStatus,
   listProducts,
   exportProductsToExcel,
+  exportProductsToPdf,
   getFeaturedProducts,
   getBestSellingProducts,
   bulkUploadProducts,
@@ -41,6 +42,7 @@ router.post('/bulk-upload', uploadBulk.single('file'), bulkUploadProducts);
 router.delete('/all', deleteAllProducts);
 router.get('/', validate(listProductsSchema), listProducts);
 router.get('/export/excel', exportProductsToExcel);
+router.get('/export/pdf', exportProductsToPdf);
 router.get('/featured', getFeaturedProducts);
 router.get('/best-selling', getBestSellingProducts);
 router.get('/:id', validate(getProductSchema), getProduct);

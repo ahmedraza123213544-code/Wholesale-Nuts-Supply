@@ -46,16 +46,46 @@ export function useHoldSales() {
     unit: item.unit,
   });
 
-  const mapHoldSale = (holdSale: any): HoldSaleRecord => ({
-    id: holdSale.id,
-    items: Array.isArray(holdSale.items) ? holdSale.items.map(normalizeItem) : [],
-    subtotal: Number(holdSale.subtotal || 0),
-    totalItems: Number(holdSale.total_items || 0),
-    customerName: holdSale.customer?.name || "Walk-in",
-    customerPhone: holdSale.customer?.phone_number || holdSale.customer?.mobile_number || "",
-    customerId: holdSale.customer?.id || holdSale.customerId || null,
-    createdAt: holdSale.created_at || new Date().toISOString(),
-  });
+  const mapHoldSale = (holdSale: any): HoldSaleRecord => {
+    const rawItems = holdSale.items;
+    let lines: any[] = [];
+    let snapshot: { id?: string; name?: string; phone?: string } | null = null;
+    if (Array.isArray(rawItems)) {
+      lines = rawItems;
+    } else if (rawItems && typeof rawItems === "object") {
+      lines = Array.isArray(rawItems.lines)
+        ? rawItems.lines
+        : Array.isArray(rawItems.items)
+          ? rawItems.items
+          : [];
+      snapshot = rawItems.customer || null;
+    }
+
+    const customer =
+      holdSale.customer && typeof holdSale.customer === "object" ? holdSale.customer : null;
+    const customerId =
+      customer?.id ||
+      holdSale.customer_id ||
+      holdSale.customerId ||
+      snapshot?.id ||
+      (typeof holdSale.customer === "string" ? holdSale.customer : null) ||
+      null;
+
+    return {
+      id: holdSale.id,
+      items: lines.map(normalizeItem),
+      subtotal: Number(holdSale.subtotal || 0),
+      totalItems: Number(holdSale.total_items || holdSale.totalItems || lines.length || 0),
+      customerName: customer?.name || snapshot?.name || (customerId ? "Customer" : "Walk-in"),
+      customerPhone:
+        customer?.phone_number ||
+        customer?.mobile_number ||
+        snapshot?.phone ||
+        "",
+      customerId,
+      createdAt: holdSale.created_at || holdSale.createdAt || new Date().toISOString(),
+    };
+  };
 
   const refreshHoldSales = useCallback(async () => {
     try {

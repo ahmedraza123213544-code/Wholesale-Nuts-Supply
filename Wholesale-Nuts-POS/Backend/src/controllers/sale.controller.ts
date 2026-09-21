@@ -207,7 +207,7 @@ const getHoldSalesController = asyncHandler(async (req: Request, res: Response) 
 
 const createHoldSaleController = asyncHandler(async (req: Request, res: Response) => {
     const holdSale = await saleService.createHoldSale({
-        customerId: req.body?.customerId,
+        customerId: req.body?.customerId || req.body?.customer_id,
         createdBy: req.user?.id,
         items: req.body?.items || [],
     });

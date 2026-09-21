@@ -307,6 +307,11 @@ export function NewSale() {
   const [scanLoading, setScanLoading] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<string | null>(null);
+  const [heldCustomerFallback, setHeldCustomerFallback] = useState<{
+    id: string;
+    name: string;
+    phone?: string;
+  } | null>(null);
   const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false);
   const [newCustomerData, setNewCustomerData] = useState({
     name: "",
@@ -1081,11 +1086,25 @@ export function NewSale() {
       return;
     }
 
+    const customerId = selectedCustomer || undefined;
+    const customerName = customerId
+      ? customers.find((c) => c.id === customerId)?.name ||
+        (heldCustomerFallback?.id === customerId ? heldCustomerFallback.name : null)
+      : null;
+
     setIsHoldingSale(true);
-    const held = await holdSale(cart, selectedCustomer || undefined);
+    const held = await holdSale(cart, customerId);
     if (held) {
       setCart([]);
       setGlobalDiscountValue("");
+      setSelectedCustomer(null);
+      setHeldCustomerFallback(null);
+      toast({
+        title: "Sale held",
+        description: customerName
+          ? `Held for ${customerName}. Resume to restore this customer.`
+          : "Walk-in sale held.",
+      });
     }
     setIsHoldingSale(false);
   };
@@ -1109,8 +1128,15 @@ export function NewSale() {
       );
       if (heldSale.customerId) {
         setSelectedCustomer(heldSale.customerId);
+        setHeldCustomerFallback({
+          id: heldSale.customerId,
+          name: heldSale.customerName || "Customer",
+          phone: heldSale.customerPhone || "",
+        });
+        void fetchCustomers(true);
       } else {
         setSelectedCustomer(null);
+        setHeldCustomerFallback(null);
       }
     }
     setResumingHoldIndex(null);
@@ -2613,7 +2639,11 @@ export function NewSale() {
                     <Users className="h-4 w-4 text-slate-400" />
                   <span className="truncate">
                     {selectedCustomer
-                      ? customers.find((c) => c.id === selectedCustomer)?.name
+                      ? customers.find((c) => c.id === selectedCustomer)?.name ||
+                        (heldCustomerFallback?.id === selectedCustomer
+                          ? heldCustomerFallback.name
+                          : null) ||
+                        "Selected customer"
                       : "Walk-in Customer"}
                   </span>
                   </div>
@@ -2630,6 +2660,7 @@ export function NewSale() {
                         value="none"
                         onSelect={() => {
                           setSelectedCustomer(null);
+                          setHeldCustomerFallback(null);
                           setCustomerSearchOpen(false);
                         }}
                         className="flex items-center gap-2 py-2.5"
@@ -2648,6 +2679,7 @@ export function NewSale() {
                           value={`${customer.name} ${customer.phone_number || ""}`}
                           onSelect={() => {
                             setSelectedCustomer(customer.id);
+                            setHeldCustomerFallback(null);
                             setCustomerSearchOpen(false);
                           }}
                           className="flex items-center gap-2 py-2.5"
@@ -2682,7 +2714,17 @@ export function NewSale() {
             <div className="mt-4 pt-3 border-t border-slate-100 flex flex-col gap-1.5">
               {(() => {
                 const customer = customers.find((c) => c.id === selectedCustomer);
-                if (!customer) return null;
+                if (!customer) {
+                  if (heldCustomerFallback?.id === selectedCustomer) {
+                    return (
+                      <p className="text-sm font-medium text-slate-800">
+                        {heldCustomerFallback.name}
+                        {heldCustomerFallback.phone ? ` · ${heldCustomerFallback.phone}` : ""}
+                      </p>
+                    );
+                  }
+                  return null;
+                }
                 const balance = Number(customer.outstanding_balance || 0);
                 const limit = Number(customer.credit_limit || 0);
                 const isOverLimit = limit > 0 && (balance + total) > limit;

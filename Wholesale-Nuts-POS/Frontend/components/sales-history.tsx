@@ -27,7 +27,6 @@ import { PageLoader } from "@/components/ui/page-loader";
 import {
   Search,
   RefreshCw,
-  Download,
   Printer,
   CalendarIcon,
   Eye,
@@ -37,6 +36,8 @@ import {
   ChevronRight,
   Mail,
   Trash2,
+  FileSpreadsheet,
+  FileText,
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
@@ -68,6 +69,13 @@ import { creditLedgerFields } from "@/lib/credit-sale-ledger";
 import { formatQtyWithUnit, resolveItemUnit } from "@/lib/units";
 import { useStore } from "@/lib/store";
 import { SaleEditor } from "./sale-editor";
+import { SalesMonthlySummary } from "./sales-monthly-summary";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  exportSalesHistoryExcel,
+  exportSalesHistoryPdf,
+  getSaleCustomerName,
+} from "@/lib/sales-history-export";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -203,6 +211,7 @@ export function SalesHistory() {
   const [datePreset, setDatePreset] = useState<
     "all" | "today" | "week" | "month" | "year" | "custom"
   >("all");
+  const [exportingKind, setExportingKind] = useState<"excel" | "pdf" | null>(null);
 
   const applyDatePreset = (
     preset: "all" | "today" | "week" | "month" | "year"
@@ -341,54 +350,70 @@ export function SalesHistory() {
     }
   };
 
+  const buildSaleParams = (paginate: boolean) => {
+    const branchId = localStorage.getItem("branch");
+    const params: Record<string, string> = {};
+    if (branchId && branchId !== "Not Found" && branchId.trim()) {
+      params.branchId = branchId.trim();
+    }
+    if (selectedCustomerId && selectedCustomerId !== "all") {
+      params.customerId = selectedCustomerId;
+    }
+    if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
+      params.paymentMethod = selectedPaymentMethod;
+    }
+    if (paginate && pageSize > 0) {
+      params.page = String(currentPage);
+      params.limit = String(pageSize);
+    }
+    if (searchTerm.trim()) {
+      params.search = searchTerm.trim();
+    }
+    if (startDate) {
+      params.startDate = startDate.toISOString();
+    }
+    if (endDate) {
+      const inclusiveEnd = new Date(endDate);
+      inclusiveEnd.setHours(23, 59, 59, 999);
+      params.endDate = inclusiveEnd.toISOString();
+    }
+    return params;
+  };
+
+  const historyFilterLabel = () => {
+    const parts: string[] = [];
+    if (searchTerm.trim()) parts.push(`Search: ${searchTerm.trim()}`);
+    if (selectedCustomerId !== "all") {
+      const customer = customers.find((item) => item.id === selectedCustomerId);
+      parts.push(`Customer: ${customer?.name || selectedCustomerId}`);
+    }
+    if (selectedPaymentMethod !== "all") {
+      parts.push(`Payment: ${selectedPaymentMethod}`);
+    }
+    if (startDate && endDate) {
+      parts.push(
+        `${format(startDate, "dd MMM yyyy")} - ${format(endDate, "dd MMM yyyy")}`
+      );
+    } else if (startDate) {
+      parts.push(`From ${format(startDate, "dd MMM yyyy")}`);
+    }
+    return parts.join(" • ") || "All sales";
+  };
+
   const fetchSales = async () => {
     setLoading(true);
     try {
-      // Get branch ID from localStorage - ALWAYS use it if available
-      // Backend will filter by this branchId regardless of admin status
-      const branchId = localStorage.getItem("branch");
       const userRole = localStorage.getItem("role");
       const isAdmin = userRole === "ADMIN" || userRole === "SUPER_ADMIN";
-      
-      // Build query parameters
-      // ALWAYS send branchId from localStorage if it exists and is valid
-      // Backend will filter by this branchId (even for admins)
-      // If no branchId in localStorage, backend will show all for admins or use JWT branch_id for non-admins
-      const params: Record<string, string> = {};
-      if (branchId && branchId !== "Not Found" && branchId.trim()) {
-        params.branchId = branchId.trim();
-      }
-      if (selectedCustomerId && selectedCustomerId !== "all") {
-        params.customerId = selectedCustomerId;
-      }
-      if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
-        params.paymentMethod = selectedPaymentMethod;
-      }
+      const params = buildSaleParams(true);
 
-      if (pageSize > 0) {
-        params.page = String(currentPage);
-        params.limit = String(pageSize);
-      }
-      if (searchTerm.trim()) {
-        params.search = searchTerm.trim();
-      }
-      if (startDate) {
-        params.startDate = startDate.toISOString();
-      }
-      if (endDate) {
-        const inclusiveEnd = new Date(endDate);
-        inclusiveEnd.setHours(23, 59, 59, 999);
-        params.endDate = inclusiveEnd.toISOString();
-      }
-      
-      // Debug logging
-      console.log("Fetching sales with params:", { 
-        branchId: params.branchId, 
-        isAdmin, 
+      console.log("Fetching sales with params:", {
+        branchId: params.branchId,
+        isAdmin,
         userRole,
-        localStorageBranchId: branchId 
+        localStorageBranchId: localStorage.getItem("branch"),
       });
-      
+
       const res = await apiClient.get<{
         data: Sale[];
         meta?: { total?: number; totalPages?: number; page?: number; limit?: number };
@@ -466,34 +491,33 @@ export function SalesHistory() {
     setCurrentPage(1);
   }, [searchTerm, startDate, endDate, selectedCustomerId, selectedPaymentMethod]);
 
-  // Export CSV
-  const exportCSV = () => {
-    const header = [
-      "Sale #",
-      "Date",
-      "Customer",
-      "Payment",
-      "Total",
-      "Status",
-      "Type",
-    ];
-    const rows = sales.map((s) => [
-      s.sale_number,
-      format(parseISO(s.sale_date), "yyyy-MM-dd"),
-      s.customer?.email || "—",
-      s.payment_method,
-      formatCurrency(s.total_amount, true), // Include negative symbol in export
-      formatSaleStatusLabel(s.status),
-      getSaleType(s).toUpperCase(),
-    ]);
-    const csv = [header, ...rows].map((r) => r.join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "sales_history.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+  const exportHistory = async (kind: "excel" | "pdf") => {
+    setExportingKind(kind);
+    try {
+      const res = await apiClient.get<{ data: Sale[] }>("/sale", {
+        params: buildSaleParams(false),
+      });
+      const rows = (res.data.data || []).filter(
+        (sale) => sale.id && sale.sale_number && sale.sale_date && sale.total_amount !== undefined
+      );
+      if (kind === "excel") {
+        exportSalesHistoryExcel(rows, { filterLabel: historyFilterLabel() });
+      } else {
+        await exportSalesHistoryPdf(rows, { filterLabel: historyFilterLabel() });
+      }
+      toast({
+        title: kind === "pdf" ? "PDF downloaded" : "Excel downloaded",
+        description: "Customer names and totals are included in the file.",
+      });
+    } catch {
+      toast({
+        title: "Export failed",
+        description: "Could not export sales history right now.",
+        variant: "destructive",
+      });
+    } finally {
+      setExportingKind(null);
+    }
   };
 
   // Print
@@ -1120,22 +1144,41 @@ export function SalesHistory() {
 
   return (
     <div className="p-4 md:p-6 space-y-4 md:space-y-6">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold">Sales History</h1>
-          <p className="text-sm md:text-base text-gray-600">View and export past sales</p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2">
+      <div>
+        <h1 className="text-2xl md:text-3xl font-bold">Sales History</h1>
+        <p className="text-sm md:text-base text-gray-600">View and export past sales</p>
+      </div>
+
+      <Tabs defaultValue="history" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="history">Sales History</TabsTrigger>
+          <TabsTrigger value="monthly">Monthly Summary</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="history" className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
           <Button variant="outline" onClick={fetchSales} disabled={loading}>
             <RefreshCw className="mr-2 h-4 w-4" /> Refresh
           </Button>
-          <Button variant="outline" onClick={exportCSV}>
-            <Download className="mr-2 h-4 w-4" /> Export
+          <Button onClick={() => void exportHistory("excel")} disabled={loading || exportingKind !== null}>
+            {exportingKind === "excel" ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <FileSpreadsheet className="mr-2 h-4 w-4" />
+            )}
+            Export Excel
+          </Button>
+          <Button variant="outline" onClick={() => void exportHistory("pdf")} disabled={loading || exportingKind !== null}>
+            {exportingKind === "pdf" ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <FileText className="mr-2 h-4 w-4" />
+            )}
+            Export PDF
           </Button>
           <Button variant="outline" onClick={printTable}>
             <Printer className="mr-2 h-4 w-4" /> Print
           </Button>
-        </div>
       </div>
 
       {/* Filters */}
@@ -1321,7 +1364,7 @@ export function SalesHistory() {
                         <TableCell>
                           {format(parseISO(s.sale_date), "MM/dd/yyyy")}
                         </TableCell>
-                        <TableCell>{s.customer?.name || "—"}</TableCell>
+                        <TableCell>{getSaleCustomerName(s)}</TableCell>
                         <TableCell>{s.payment_method}</TableCell>
                         <TableCell
                           className={
@@ -1486,6 +1529,12 @@ export function SalesHistory() {
           )}
         </CardContent>
       </Card>
+        </TabsContent>
+
+        <TabsContent value="monthly">
+          <SalesMonthlySummary />
+        </TabsContent>
+      </Tabs>
 
       {/* Sale Receipt Modal */}
       <Dialog open={!!viewSale || viewLoading} onOpenChange={closeViewModal}>

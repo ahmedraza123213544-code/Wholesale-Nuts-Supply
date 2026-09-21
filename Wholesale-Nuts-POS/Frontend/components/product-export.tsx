@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Download, Loader2 } from "lucide-react"
+import { FileSpreadsheet, FileText, Loader2 } from "lucide-react"
 import { PageLoader } from "@/components/ui/page-loader"
 import apiClient from "@/lib/apiClient"
 import { API_ENDPOINTS } from "@/config/constants"
@@ -22,6 +22,9 @@ const EXPORT_COLUMNS = [
   { key: "product_id", label: "Product ID" },
   { key: "product_code", label: "Product Code" },
   { key: "product_name", label: "Product Name" },
+  { key: "units", label: "Units" },
+  { key: "unit_name", label: "Unit Name" },
+  { key: "unit_code", label: "Unit Code" },
   { key: "sku", label: "SKU" },
   { key: "barcode", label: "Barcode (Real SKU only)" },
   { key: "description", label: "Description" },
@@ -37,8 +40,6 @@ const EXPORT_COLUMNS = [
   { key: "subcategory_name", label: "Subcategory" },
   { key: "subcategory_code", label: "Subcategory Code" },
   { key: "unit_id", label: "Unit ID" },
-  { key: "unit_name", label: "Unit" },
-  { key: "unit_code", label: "Unit Code" },
   { key: "tax_id", label: "Tax ID" },
   { key: "tax_name", label: "Tax" },
   { key: "tax_code", label: "Tax Code" },
@@ -75,9 +76,12 @@ const EXPORT_COLUMNS = [
   { key: "updated_at", label: "Updated At" },
 ] as const
 
+const REQUIRED_COLUMNS = ["units", "unit_name", "unit_code"] as const
+
 export function ProductExport() {
   const { toast } = useToast()
-  const [isExporting, setIsExporting] = useState(false)
+  const [exportingKind, setExportingKind] = useState<"excel" | "pdf" | null>(null)
+  const isExporting = exportingKind !== null
   const [isLoading, setIsLoading] = useState(true)
   const [categories, setCategories] = useState<DropdownOption[]>([])
   const [subcategories, setSubcategories] = useState<DropdownOption[]>([])
@@ -133,6 +137,9 @@ export function ProductExport() {
   }
 
   const toggleColumn = (columnKey: string) => {
+    if (REQUIRED_COLUMNS.includes(columnKey as (typeof REQUIRED_COLUMNS)[number])) {
+      return
+    }
     setSelectedColumns((prev) =>
       prev.includes(columnKey) ? prev.filter((item) => item !== columnKey) : [...prev, columnKey]
     )
@@ -143,10 +150,35 @@ export function ProductExport() {
   }
 
   const clearAllColumns = () => {
-    setSelectedColumns([])
+    setSelectedColumns([...REQUIRED_COLUMNS])
   }
 
-  const handleExport = async () => {
+  const buildExportParams = () => {
+    const params: Record<string, string> = {}
+    if (search.trim()) params.search = search.trim()
+    if (categoryId !== "all") params.category_id = categoryId
+    if (subcategoryId !== "all") params.subcategory_id = subcategoryId
+    if (supplierId !== "all") params.supplier_id = supplierId
+    if (brandId !== "all") params.brand_id = brandId
+    if (isActive !== "all") params.is_active = isActive
+    if (displayOnPos !== "all") params.display_on_pos = displayOnPos
+    const columns = Array.from(new Set([...selectedColumns, ...REQUIRED_COLUMNS]))
+    params.columns = columns.join(",")
+    return params
+  }
+
+  const downloadBlob = (data: Blob, fileName: string) => {
+    const url = window.URL.createObjectURL(new Blob([data]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", fileName)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    window.URL.revokeObjectURL(url)
+  }
+
+  const handleExport = async (kind: "excel" | "pdf") => {
     if (selectedColumns.length === 0) {
       toast({
         title: "No fields selected",
@@ -156,47 +188,38 @@ export function ProductExport() {
       return
     }
 
-    setIsExporting(true)
+    setExportingKind(kind)
     try {
-      const params: Record<string, string> = {}
-
-      if (search.trim()) params.search = search.trim()
-      if (categoryId !== "all") params.category_id = categoryId
-      if (subcategoryId !== "all") params.subcategory_id = subcategoryId
-      if (supplierId !== "all") params.supplier_id = supplierId
-      if (brandId !== "all") params.brand_id = brandId
-      if (isActive !== "all") params.is_active = isActive
-      if (displayOnPos !== "all") params.display_on_pos = displayOnPos
-      params.columns = selectedColumns.join(",")
-
-      const response = await apiClient.get(API_ENDPOINTS.PRODUCT_EXPORT_EXCEL, {
-        params,
+      const endpoint =
+        kind === "pdf" ? API_ENDPOINTS.PRODUCT_EXPORT_PDF : API_ENDPOINTS.PRODUCT_EXPORT_EXCEL
+      const dateStamp = new Date().toISOString().split("T")[0]
+      const response = await apiClient.get(endpoint, {
+        params: buildExportParams(),
         responseType: "blob",
       })
 
-      const url = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement("a")
-      link.href = url
-      link.setAttribute("download", `products-export-${new Date().toISOString().split("T")[0]}.xlsx`)
-      document.body.appendChild(link)
-      link.click()
-      link.remove()
-      window.URL.revokeObjectURL(url)
+      downloadBlob(
+        response.data,
+        kind === "pdf" ? `products-catalog-${dateStamp}.pdf` : `products-export-${dateStamp}.xlsx`
+      )
 
       toast({
-        title: "Export started",
-        description: "Your Excel file has been downloaded.",
+        title: kind === "pdf" ? "PDF downloaded" : "Excel downloaded",
+        description:
+          kind === "pdf"
+            ? "Your product catalog PDF includes Units for every product."
+            : "Your Excel file includes Units for every product.",
       })
     } catch {
       toast({
         title: "Export failed",
         description: navigator.onLine
-          ? "Could not export products right now."
+          ? `Could not export products to ${kind === "pdf" ? "PDF" : "Excel"} right now.`
           : "No cached export for these filters. Run export once while online, then you can download the same export offline.",
         variant: "destructive",
       })
     } finally {
-      setIsExporting(false)
+      setExportingKind(null)
     }
   }
 
@@ -209,7 +232,7 @@ export function ProductExport() {
       <div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Product Export</h1>
         <p className="text-sm md:text-base text-gray-600">
-          Export products to Excel with category details and real barcode values.
+          Export products to Excel or a branded PDF catalog. Units of each product are always included.
         </p>
       </div>
 
@@ -309,16 +332,29 @@ export function ProductExport() {
             <Button variant="outline" onClick={clearFilters} disabled={isExporting}>
               Clear Filters
             </Button>
-            <Button onClick={handleExport} disabled={isExporting}>
-              {isExporting ? (
+            <Button onClick={() => handleExport("excel")} disabled={isExporting}>
+              {exportingKind === "excel" ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Exporting...
+                  Exporting Excel...
                 </>
               ) : (
                 <>
-                  <Download className="h-4 w-4 mr-2" />
+                  <FileSpreadsheet className="h-4 w-4 mr-2" />
                   Export Excel
+                </>
+              )}
+            </Button>
+            <Button variant="outline" onClick={() => handleExport("pdf")} disabled={isExporting}>
+              {exportingKind === "pdf" ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Exporting PDF...
+                </>
+              ) : (
+                <>
+                  <FileText className="h-4 w-4 mr-2" />
+                  Export PDF
                 </>
               )}
             </Button>
@@ -329,6 +365,9 @@ export function ProductExport() {
       <Card>
         <CardHeader>
           <CardTitle>Select Fields For Excel</CardTitle>
+          <p className="text-sm text-muted-foreground font-normal">
+            Units are always exported. PDF uses a catalog layout with Units, stock, and prices.
+          </p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-wrap gap-2">
@@ -348,6 +387,7 @@ export function ProductExport() {
               <label key={column.key} className="flex items-center gap-2 text-sm cursor-pointer">
                 <Checkbox
                   checked={selectedColumns.includes(column.key)}
+                  disabled={REQUIRED_COLUMNS.includes(column.key as (typeof REQUIRED_COLUMNS)[number])}
                   onCheckedChange={() => toggleColumn(column.key)}
                 />
                 <span>{column.label}</span>

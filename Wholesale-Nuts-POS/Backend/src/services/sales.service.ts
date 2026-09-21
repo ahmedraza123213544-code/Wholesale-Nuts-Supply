@@ -51,6 +51,65 @@ interface HoldSaleCartItem {
   unit?: string;
 }
 
+type HoldCustomerSnapshot = {
+  id: string;
+  name: string;
+  phone: string;
+};
+
+function parseHoldSaleItems(raw: Prisma.JsonValue | null | undefined): HoldSaleCartItem[] {
+  if (Array.isArray(raw)) return raw as unknown as HoldSaleCartItem[];
+  if (raw && typeof raw === 'object') {
+    const obj = raw as { lines?: unknown; items?: unknown };
+    if (Array.isArray(obj.lines)) return obj.lines as unknown as HoldSaleCartItem[];
+    if (Array.isArray(obj.items)) return obj.items as unknown as HoldSaleCartItem[];
+  }
+  return [];
+}
+
+function parseHoldCustomerSnapshot(raw: Prisma.JsonValue | null | undefined): HoldCustomerSnapshot | null {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const customer = (raw as { customer?: HoldCustomerSnapshot }).customer;
+  if (!customer?.id) return null;
+  return {
+    id: customer.id,
+    name: customer.name || 'Customer',
+    phone: customer.phone || '',
+  };
+}
+
+function presentHoldSale(holdSale: {
+  items: Prisma.JsonValue;
+  customer_id: string | null;
+  customer?: {
+    id: string;
+    name: string | null;
+    phone_number: string | null;
+    mobile_number: string | null;
+  } | null;
+}) {
+  const snapshot = parseHoldCustomerSnapshot(holdSale.items);
+  const customerId = holdSale.customer?.id || holdSale.customer_id || snapshot?.id || null;
+  return {
+    ...holdSale,
+    items: parseHoldSaleItems(holdSale.items),
+    customerId,
+    customer: holdSale.customer
+      ? {
+          ...holdSale.customer,
+          name: holdSale.customer.name || 'Customer',
+        }
+      : snapshot
+        ? {
+            id: snapshot.id,
+            name: snapshot.name,
+            phone_number: snapshot.phone || null,
+            mobile_number: null,
+          }
+        : null,
+  };
+}
+
 class SaleService {
   /**
    * Sum of RETURN line quantities already posted against each original sale_item id
@@ -520,7 +579,7 @@ class SaleService {
   }
 
   async getHoldSales() {
-    return prisma.holdSale.findMany({
+    const holdSales = await prisma.holdSale.findMany({
       include: {
         customer: {
           select: {
@@ -533,6 +592,7 @@ class SaleService {
       },
       orderBy: { created_at: 'desc' },
     });
+    return holdSales.map(presentHoldSale);
   }
 
   async createHoldSale({
@@ -567,11 +627,31 @@ class SaleService {
       0,
     );
 
-    return prisma.holdSale.create({
+    let customerSnapshot: HoldCustomerSnapshot | null = null;
+    if (customerId) {
+      const customer = await prisma.customer.findUnique({
+        where: { id: customerId },
+        select: { id: true, name: true, phone_number: true, mobile_number: true },
+      });
+      if (!customer) {
+        throw new AppError(400, 'Invalid customer');
+      }
+      customerSnapshot = {
+        id: customer.id,
+        name: customer.name || 'Customer',
+        phone: customer.phone_number || customer.mobile_number || '',
+      };
+    }
+
+    const holdSale = await prisma.holdSale.create({
       data: {
-        customer_id: customerId,
+        customer_id: customerSnapshot?.id ?? null,
         created_by: createdBy,
-        items: normalizedItems as Prisma.InputJsonValue,
+        items: {
+          version: 2,
+          customer: customerSnapshot,
+          lines: normalizedItems,
+        } as Prisma.InputJsonValue,
         subtotal: new Prisma.Decimal(subtotal),
         total_items: normalizedItems.length,
       },
@@ -586,6 +666,8 @@ class SaleService {
         },
       },
     });
+
+    return presentHoldSale(holdSale);
   }
 
   async retrieveHoldSale({ holdSaleId }: { holdSaleId: string }) {
@@ -610,7 +692,7 @@ class SaleService {
 
       await tx.holdSale.delete({ where: { id: holdSaleId } });
 
-      return holdSale;
+      return presentHoldSale(holdSale);
     });
   }
 

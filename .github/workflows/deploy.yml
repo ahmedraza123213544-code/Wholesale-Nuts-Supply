@@ -35,7 +35,7 @@ jobs:
       - name: Build POS frontend
         working-directory: Wholesale-Nuts-POS/Frontend
         run: |
-          npm install --no-audit --no-fund
+          npm install --no-audit --no-fund --legacy-peer-deps
           npx next build
 
       - name: Build POS backend
@@ -58,13 +58,13 @@ jobs:
       - name: Deploy website
         run: |
           rsync -az --delete \
-            -e "ssh -o IdentitiesOnly=yes" \
+            -e "ssh -o StrictHostKeyChecking=yes" \
             frontend/out/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/wholesale/website/"
 
       - name: Deploy POS frontend
         run: |
           rsync -az --delete \
-            -e "ssh -o IdentitiesOnly=yes" \
+            -e "ssh -o StrictHostKeyChecking=yes" \
             Wholesale-Nuts-POS/Frontend/out/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/wholesale/pos/"
 
       - name: Deploy POS backend
@@ -73,14 +73,14 @@ jobs:
             --exclude node_modules \
             --exclude .env \
             --exclude .git \
-            -e "ssh -o IdentitiesOnly=yes" \
+            -e "ssh -o StrictHostKeyChecking=yes" \
             Wholesale-Nuts-POS/Backend/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/wholesale/backend/"
-          ssh -o IdentitiesOnly=yes \
+          ssh -o StrictHostKeyChecking=yes \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             'cd /var/www/wholesale/backend && npm install --omit=dev && npx prisma generate --schema=src/prisma/schema.prisma && systemctl restart wholesale-api && sleep 1 && systemctl is-active wholesale-api'
 
       - name: Fix static ownership
         run: |
-          ssh -o IdentitiesOnly=yes \
+          ssh -o StrictHostKeyChecking=yes \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             'chown -R www-data:www-data /var/www/wholesale/website /var/www/wholesale/pos'

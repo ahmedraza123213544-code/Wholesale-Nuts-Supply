@@ -77,7 +77,7 @@ jobs:
             Wholesale-Nuts-POS/Backend/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/wholesale/backend/"
           ssh -o StrictHostKeyChecking=yes \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            'cd /var/www/wholesale/backend && npm install --omit=dev && npx prisma generate --schema=src/prisma/schema.prisma && systemctl restart wholesale-api && sleep 1 && systemctl is-active wholesale-api'
+            'cd /var/www/wholesale/backend && npm install --omit=dev && npx prisma generate --schema=src/prisma/schema.prisma && systemctl restart wholesale-api && for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do systemctl is-active --quiet wholesale-api && exit 0; sleep 1; done; systemctl --no-pager -l status wholesale-api; exit 1'
 
       - name: Fix static ownership
         run: |

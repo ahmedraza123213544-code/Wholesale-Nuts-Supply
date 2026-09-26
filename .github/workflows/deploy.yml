@@ -29,13 +29,13 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: https://wholesalenutsupply.com
         run: |
-          npm ci
+          npm install --no-audit --no-fund
           npx next build
 
       - name: Build POS frontend
         working-directory: Wholesale-Nuts-POS/Frontend
         run: |
-          npm ci
+          npm install --no-audit --no-fund
           npx next build
 
       - name: Build POS backend
@@ -43,7 +43,7 @@ jobs:
         env:
           HUSKY: "0"
         run: |
-          npm ci --ignore-scripts
+          npm install --ignore-scripts --no-audit --no-fund
           npx prisma generate --schema=src/prisma/schema.prisma
           npm run build
 

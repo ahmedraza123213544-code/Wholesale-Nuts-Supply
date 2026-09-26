@@ -1,0 +1,86 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-wholesale
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: |
+            frontend/package-lock.json
+            Wholesale-Nuts-POS/Frontend/package-lock.json
+            Wholesale-Nuts-POS/Backend/package-lock.json
+
+      - name: Build website
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_SITE_URL: https://wholesalenutsupply.com
+        run: |
+          npm ci
+          npx next build
+
+      - name: Build POS frontend
+        working-directory: Wholesale-Nuts-POS/Frontend
+        run: |
+          npm ci
+          npx next build
+
+      - name: Build POS backend
+        working-directory: Wholesale-Nuts-POS/Backend
+        env:
+          HUSKY: "0"
+        run: |
+          npm ci --ignore-scripts
+          npx prisma generate --schema=src/prisma/schema.prisma
+          npm run build
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Add VPS to known_hosts
+        run: ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy website
+        run: |
+          rsync -az --delete \
+            -e "ssh -o IdentitiesOnly=yes" \
+            frontend/out/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/wholesale/website/"
+
+      - name: Deploy POS frontend
+        run: |
+          rsync -az --delete \
+            -e "ssh -o IdentitiesOnly=yes" \
+            Wholesale-Nuts-POS/Frontend/out/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/wholesale/pos/"
+
+      - name: Deploy POS backend
+        run: |
+          rsync -az --delete \
+            --exclude node_modules \
+            --exclude .env \
+            --exclude .git \
+            -e "ssh -o IdentitiesOnly=yes" \
+            Wholesale-Nuts-POS/Backend/ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/wholesale/backend/"
+          ssh -o IdentitiesOnly=yes \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'cd /var/www/wholesale/backend && npm install --omit=dev && npx prisma generate --schema=src/prisma/schema.prisma && systemctl restart wholesale-api && sleep 1 && systemctl is-active wholesale-api'
+
+      - name: Fix static ownership
+        run: |
+          ssh -o IdentitiesOnly=yes \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'chown -R www-data:www-data /var/www/wholesale/website /var/www/wholesale/pos'
